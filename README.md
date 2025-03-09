@@ -2,10 +2,10 @@
 
 Team Members:
 
-*
-*
-*
-*
+* Charlotte Corcoran
+* Alymuhammad Bijani
+* Mustafa Ahmed
+* Victor Durojaiye
 
 For each iteration you should answer the following:
 
