@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import bankapp.Menu;
 import bankapp.BankAccount;
+import bankapp.Menu.UserInputOptions;
+
 
 import java.awt.*;
 
@@ -15,7 +17,7 @@ public class MenuTests {
 	 @Test
 	    public void testUserDeposit(){
 	        Menu menu = new Menu();
-	        menu.processUserInput(1, 25.0); // 1 represents deposit
+	        menu.processUserInput(UserInputOptions.DEPOSIT, 25.0);
 	        BankAccount account = menu.getAccount();
 	        assertEquals(25.0, account.getCurrentBalance(), 0.005);
 	    }
@@ -23,18 +25,28 @@ public class MenuTests {
 	    @Test
 	    public void testUserWithdraw(){
 	        Menu menu = new Menu();
-	        menu.processUserInput(1, 50.0); // Deposit first
-	        menu.processUserInput(2, 25.0); // Withdraw
+	        menu.processUserInput(UserInputOptions.DEPOSIT, 100.0);
+	        menu.processUserInput(UserInputOptions.WITHDRAW, 25.0);
 	        BankAccount account = menu.getAccount();
-	        assertEquals(25.0, account.getCurrentBalance(), 0.005);
+	        assertEquals(75.0, account.getCurrentBalance(), 0.005);
+	    }
+	    
+	    @Test
+	    public void testCheckBalance() {
+	    	Menu menu = new Menu();
+	    	menu.processUserInput(UserInputOptions.DEPOSIT, 100.0);
+	    	menu.processUserInput(UserInputOptions.CHECK_BALANCE, 0.0);
+	    	BankAccount account = menu.getAccount();
+	        assertEquals(100.0, account.getCurrentBalance(), 0.005);
+
 	    }
 	    
 	    @Test
 	    public void testInvalidChoice() {
 	        Menu menu = new Menu();
-	        menu.processUserInput(3, 20.0); // Invalid choice
+	        menu.processUserInput(null, 20.0);
 	        BankAccount account = menu.getAccount();
-	        assertEquals(0.0, account.getCurrentBalance(), 0.005); // Balance should remain unchanged
+	        assertEquals(0.0, account.getCurrentBalance(), 0.005);
 	    }
 
 }

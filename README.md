@@ -22,9 +22,13 @@ What commands are needed to compile and run your code from the command line (ple
 ** First Iteration **
 The user stories completed for this iteration are:
 1. A bank customer should be able to withdraw from an account. (Charlotte)
-2. 
+2. A bank customer should be able to check their account balance. (Charlotte)
+3. A bank customer should be able to view their transaction history. (Victor)
 
-The user stories we itend to complete in the next iteration are:
+
+ 
+
+The user stories we intend to complete in the next iteration are:
 1. 
 
 Things we have implemented that do not currently work:
