@@ -24,6 +24,7 @@ public class Menu {
 
 	    public Menu(){
 	        theAccount = new BankAccount();
+			theAccount.authenticateUser();
 	    }
 
 	    //display methods do not need to be tested
