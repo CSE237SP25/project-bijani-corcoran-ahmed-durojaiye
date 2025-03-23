@@ -1,13 +1,11 @@
 import java.util.HashMap;
 import java.util.Scanner;
 
-//Need to add getters and setters to bottom of file
-//Need to add option to choose accountType
-
 public class CreateAccount {
     private HashMap<String, String> userDatabase;
     private Scanner scanner;
     private BankAccount theAccount;
+    private String accountType;
 
     public CreateAccount(HashMap<String, String> userDatabase, Scanner scanner) {
         this.userDatabase = userDatabase;
@@ -33,7 +31,7 @@ public class CreateAccount {
 
         if (userDatabase.containsKey(username) && userDatabase.get(username).equals(password)) {
             System.out.println("Login successful. Welcome, " + username + "!");
-            return new BankAccount();
+            return selectAccountType();
         } else {
             System.out.println("Invalid credentials. Try again.");
             return login();
@@ -51,9 +49,40 @@ public class CreateAccount {
 
         System.out.println("Enter a password:");
         String password = scanner.nextLine();
-
         userDatabase.put(username, password);
+
         System.out.println("Account created successfully! You are now logged in.");
-        return new BankAccount();
+        return selectAccountType();
+    }
+
+    private BankAccount selectAccountType() {
+        System.out.println("Select your account type (checking/savings):");
+        String type = scanner.nextLine().trim().toLowerCase();
+
+        while (!type.equals("checking") && !type.equals("savings")) {
+            System.out.println("Invalid choice. Please enter 'checking' or 'savings':");
+            type = scanner.nextLine().trim().toLowerCase();
+        }
+
+        this.accountType = type;
+        System.out.println("You have selected a " + type + " account.");
+        return new BankAccount(type);
+    }
+
+    // Getters and Setters
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public BankAccount getTheAccount() {
+        return theAccount;
+    }
+
+    public void setTheAccount(BankAccount theAccount) {
+        this.theAccount = theAccount;
     }
 }

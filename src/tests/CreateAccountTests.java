@@ -23,48 +23,61 @@ public class CreateAccountTests {
     }
 
     @Test
-    public void testCreateNewAccount() {
-        String input = "username123\npassword123\n";
+    public void testCreateNewCheckingAccount() {
+        String input = "username123\npassword123\nchecking\n";
         scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         createAccount = new CreateAccount(userDatabase, scanner);
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
-        assertTrue(userDatabase.containsKey("username123"));
         assertEquals("password123", userDatabase.get("username123"));
+        assertEquals("checking", createAccount.getAccountType());
+    }
+
+    @Test
+    public void testCreateNewSavingsAccount() {
+        String input = "username123\npassword123\nsavings\n";
+        scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        createAccount = new CreateAccount(userDatabase, scanner);
+
+        BankAccount account = createAccount.authenticateUser();
+        assertNotNull(account);
+        assertEquals("password123", userDatabase.get("username123"));
+        assertEquals("savings", createAccount.getAccountType());
     }
 
     @Test
     public void testLoginSuccess() {
         userDatabase.put("username123", "password123");
-        String input = "username123\npassword123\n";
+        String input = "username123\npassword123\nchecking\n";
         scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         createAccount = new CreateAccount(userDatabase, scanner);
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("checking", createAccount.getAccountType());
     }
 
     @Test
     public void testLoginFailureAndRetry() {
         userDatabase.put("username123", "password123");
-        String input = "username123\nwrongpassword\nusername123\npassword123\n";
+        String input = "username123\nwrongpassword\nusername123\npassword123\nsavings\n";
         scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         createAccount = new CreateAccount(userDatabase, scanner);
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("savings", createAccount.getAccountType());
     }
 
     @Test
-    public void testCreateAccountWithExistingUsername() {
-        userDatabase.put("username123", "password123");
-        String input = "username123\npassword123\n";
+    public void testInvalidAccountTypeSelection() {
+        String input = "username123\npassword123\nwrongType\nchecking\n";
         scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         createAccount = new CreateAccount(userDatabase, scanner);
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
-        assertEquals("password123", userDatabase.get("username123"));
+        assertEquals("checking", createAccount.getAccountType());
     }
 }
