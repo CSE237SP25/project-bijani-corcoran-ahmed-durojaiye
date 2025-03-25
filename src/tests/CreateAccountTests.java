@@ -30,6 +30,8 @@ public class CreateAccountTests {
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("username123", createAccount.getUsername());
+        assertEquals("password123", createAccount.getPassword());
         assertEquals("password123", userDatabase.get("username123"));
         assertEquals("checking", createAccount.getAccountType());
     }
@@ -42,6 +44,8 @@ public class CreateAccountTests {
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("username123", createAccount.getUsername());
+        assertEquals("password123", createAccount.getPassword());
         assertEquals("password123", userDatabase.get("username123"));
         assertEquals("savings", createAccount.getAccountType());
     }
@@ -55,6 +59,8 @@ public class CreateAccountTests {
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("username123", createAccount.getUsername());
+        assertEquals("password123", createAccount.getPassword());
         assertEquals("checking", createAccount.getAccountType());
     }
 
@@ -67,6 +73,8 @@ public class CreateAccountTests {
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("username123", createAccount.getUsername());
+        assertEquals("password123", createAccount.getPassword());
         assertEquals("savings", createAccount.getAccountType());
     }
 
@@ -78,6 +86,8 @@ public class CreateAccountTests {
 
         BankAccount account = createAccount.authenticateUser();
         assertNotNull(account);
+        assertEquals("username123", createAccount.getUsername());
+        assertEquals("password123", createAccount.getPassword());
         assertEquals("checking", createAccount.getAccountType());
     }
 }

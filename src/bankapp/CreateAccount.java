@@ -6,6 +6,8 @@ public class CreateAccount {
     private Scanner scanner;
     private BankAccount theAccount;
     private String accountType;
+    private String username;
+    private String password;
 
     public CreateAccount(HashMap<String, String> userDatabase, Scanner scanner) {
         this.userDatabase = userDatabase;
@@ -25,9 +27,9 @@ public class CreateAccount {
 
     private BankAccount login() {
         System.out.println("Enter your username:");
-        String username = scanner.nextLine();
+        this.username = scanner.nextLine();
         System.out.println("Enter your password:");
-        String password = scanner.nextLine();
+        this.password = scanner.nextLine();
 
         if (userDatabase.containsKey(username) && userDatabase.get(username).equals(password)) {
             System.out.println("Login successful. Welcome, " + username + "!");
@@ -40,7 +42,7 @@ public class CreateAccount {
 
     private BankAccount createAccount() {
         System.out.println("Creating a new account. Enter a username:");
-        String username = scanner.nextLine();
+        this.username = scanner.nextLine();
 
         if (userDatabase.containsKey(username)) {
             System.out.println("Username already exists. Try logging in.");
@@ -48,7 +50,7 @@ public class CreateAccount {
         }
 
         System.out.println("Enter a password:");
-        String password = scanner.nextLine();
+        this.password = scanner.nextLine();
         userDatabase.put(username, password);
 
         System.out.println("Account created successfully! You are now logged in.");
@@ -84,5 +86,21 @@ public class CreateAccount {
 
     public void setTheAccount(BankAccount theAccount) {
         this.theAccount = theAccount;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
