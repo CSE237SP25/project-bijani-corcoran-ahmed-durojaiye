@@ -76,28 +76,28 @@ public class CreateAccount {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
     public BankAccount getTheAccount() {
         return theAccount;
-    }
-
-    public void setTheAccount(BankAccount theAccount) {
-        this.theAccount = theAccount;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public void setTheAccount(BankAccount theAccount) {
+        this.theAccount = theAccount;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {
