@@ -1,3 +1,4 @@
+package bankapp;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -24,6 +25,23 @@ public class CreateAccount {
             return createAccount();
         }
     }
+
+    public void changePassword() {
+        System.out.println("Enter current password:");
+        String enteredPassword = scanner.nextLine();
+    
+        if (!enteredPassword.equals(this.password)) {
+            System.out.println("Incorrect password. Try again.");
+            return;
+        }
+    
+        System.out.println("Enter new password:");
+        String newPassword = scanner.nextLine();
+        userDatabase.put(this.username, newPassword);
+        this.password = newPassword;
+    
+        System.out.println("Password updated successfully.");
+    }    
 
     private BankAccount login() {
         System.out.println("Enter your username:");
