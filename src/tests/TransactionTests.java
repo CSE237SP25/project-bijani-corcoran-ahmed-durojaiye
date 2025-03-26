@@ -16,7 +16,7 @@ public class TransactionTests {
 
 	@Test
 	public void testTransactionCreateDeposit() {
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount("checking");
 		account.deposit(100);
 		List<Transaction> transactionHistory = account.getTransactionHistory();
 		assertEquals(1, transactionHistory.size());
