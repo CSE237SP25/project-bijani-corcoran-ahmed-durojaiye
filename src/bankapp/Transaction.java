@@ -14,4 +14,15 @@ public class Transaction {
 		this.amount = amount;
 	}
 	
+	public String toString() {
+		return transactionType + ": $" + amount + "\n";
+	}
+	
+	public String getType() {
+        return transactionType;
+    }
+    
+    public double getAmount() {
+        return amount;
+    }
 }

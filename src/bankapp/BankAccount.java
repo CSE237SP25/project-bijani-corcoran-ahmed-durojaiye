@@ -46,4 +46,13 @@ public class BankAccount {
 	public String getAccountType() {
 		return accountType;
 	}
+	
+	public List<Transaction> getRecentTransactions(int count) {
+        int transactionCount = transactionHistory.size();
+        if (count >= transactionCount) {
+            return getTransactionHistory();
+        } else {
+            return transactionHistory.subList(transactionCount - count, transactionCount);
+        }
+    }
 }
