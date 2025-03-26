@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import bankapp.Menu;
 import bankapp.BankAccount;
+import bankapp.Transaction;
+import java.awt.*;
+import java.util.List;
 import bankapp.Menu.UserInputOptions;
 
 
@@ -49,4 +52,47 @@ public class MenuTests {
 	        assertEquals(0.0, account.getCurrentBalance(), 0.005);
 	    }
 
+	    @Test
+	    public void testGetFullTransactionHistory() {
+	        BankAccount account = new BankAccount("a");
+	        
+	        account.deposit(100.0);
+	        account.withdraw(20.0);
+	        account.deposit(50.0);
+	 
+	        
+	        List<Transaction> history = account.getTransactionHistory();
+	        
+	        assertEquals(3, history.size());
+	        
+	        assertEquals("deposit", history.get(0).getType());
+	        assertEquals(100.0, history.get(0).getAmount(), 0.001);
+	        assertEquals("withdraw", history.get(1).getType());
+	        assertEquals(20.0, history.get(1).getAmount(), 0.001);
+	        assertEquals("deposit", history.get(2).getType());
+	        assertEquals(50.0, history.get(2).getAmount(), 0.001);
+	    }
+	    
+	    @Test
+	    public void testGetRecentTransactions() {
+	        BankAccount account = new BankAccount("test");
+	        
+	        account.deposit(100.0);
+	        account.withdraw(20.0);
+	        account.deposit(50.0);
+	        account.withdraw(10.0);
+	        account.deposit(25.0);
+	        
+	        List<Transaction> recentTransactions = account.getRecentTransactions(3);
+	        
+	        assertEquals(3, recentTransactions.size());
+	        
+	        assertEquals("deposit", recentTransactions.get(0).getType());
+	        assertEquals(50.0, recentTransactions.get(0).getAmount(), 0.001);
+	        assertEquals("withdraw", recentTransactions.get(1).getType());
+	        assertEquals(10.0, recentTransactions.get(1).getAmount(), 0.001);
+	        assertEquals("deposit", recentTransactions.get(2).getType());
+	        assertEquals(25.0, recentTransactions.get(2).getAmount(), 0.001);
+	    }
+	    
 }
