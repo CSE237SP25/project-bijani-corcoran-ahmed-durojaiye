@@ -7,10 +7,12 @@ public class BankAccount {
 
 	private double balance;
 	private List<Transaction> transactionHistory;
+	private String accountType;
 	
-	public BankAccount() {
+	public BankAccount(String accountType) {
 		this.balance = 0;
 		this.transactionHistory = new ArrayList<>();
+		this.accountType = accountType;
 	}
 	
 	public void deposit(double amount) {
@@ -40,5 +42,8 @@ public class BankAccount {
 	
 	public List<Transaction> getTransactionHistory(){
 		return transactionHistory;
+	}
+	public String getAccountType() {
+		return accountType;
 	}
 }
