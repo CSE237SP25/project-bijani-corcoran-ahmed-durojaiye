@@ -1,11 +1,10 @@
 #!/bin/bash
 
 # Navigate to the root directory where src is located
-cd "$(dirname "$0")" 
+cd "$(dirname "$0")" || exit
 
-# Compile all Java files in the src/bankapp directory
+# Compile all Java files in the bankapp package
 javac src/bankapp/*.java
 
-# Run the Menu class from the bankapp package
-java -cp src bankapp.Menu
-
+# Run the main BankApp class from the bankapp package
+java -cp src bankapp.BankApp

@@ -1,49 +1,38 @@
 package bankapp;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankAccount {
+abstract class BankAccount {
+    protected double balance;
+    protected String name;
+    protected List<Transaction> transactionHistory = new ArrayList<>();
 
-	private double balance;
-	private List<Transaction> transactionHistory;
-	private String accountType;
-	
-	public BankAccount(String accountType) {
-		this.balance = 0;
-		this.transactionHistory = new ArrayList<>();
-		this.accountType = accountType;
-	}
-	
-	public void deposit(double amount) {
-		if(amount < 0) {
-			throw new IllegalArgumentException();
-		}
-		this.balance += amount;
-		Transaction deposit = new Transaction("deposit", amount);
-		transactionHistory.add(deposit);
-	}
-	
-	public void withdraw(double amount) {
-		if(amount < 0) {
-			throw new IllegalArgumentException();
-		}
-		if(amount > this.balance) {
-			throw new IllegalArgumentException();
-		}
-		this.balance -= amount;
-		Transaction withdraw = new Transaction("withdraw", amount);
-		transactionHistory.add(withdraw);
-	}
-	
-	public double getCurrentBalance() {
-		return this.balance;
-	}
-	
-	public List<Transaction> getTransactionHistory(){
-		return transactionHistory;
-	}
-	public String getAccountType() {
-		return accountType;
-	}
+    public BankAccount(String name) {
+        this.name = name;
+        this.balance = 0;
+    }
+
+    public void deposit(double amount) {
+        if (amount <= 0) throw new IllegalArgumentException("Invalid deposit");
+        balance += amount;
+        transactionHistory.add(new Transaction("deposit", amount));
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0 || amount > balance) throw new IllegalArgumentException("Invalid withdraw");
+        balance -= amount;
+        transactionHistory.add(new Transaction("withdraw", amount));
+    }
+
+    public double getBalance() { return balance; }
+
+    public List<Transaction> getTransactionHistory() { return transactionHistory; }
+
+    public List<Transaction> getRecentTransactions(int n) {
+        return transactionHistory.subList(Math.max(0, transactionHistory.size() - n), transactionHistory.size());
+    }
+
+    public String getName() { return name; }
+
+    public abstract String getAccountType();
 }
