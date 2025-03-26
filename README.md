@@ -31,8 +31,8 @@
 4. A bank customer should be able to schedule a future payment and/or set up repeating payments or transfers between accounts. (Victor)
 5. A bank customer should be able to close an account. (Mustafa)
 6. ADD (Mustafa)
-7. ADD (Alymuhammad)
-8. ADD (Alymuhammad)
+7. A bank admin should be able to freeze an account. (Alymuhammad)
+8. A bank customer should be able to create a strong Password (Alymuhammad)
 
 
 **Things we have implemented that do not currently work:**
