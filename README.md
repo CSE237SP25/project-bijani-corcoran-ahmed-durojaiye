@@ -51,7 +51,6 @@ To test the menu class: ./MenuScript.sh
 
 ### <ins> Notes </ins>
 
-
 For each iteration you should answer the following:
 
 What user stories were completed this iteration?
