@@ -29,7 +29,7 @@ public class Menu {
 	    }
 	  
 	    public Menu(){
-	        theAccount = new BankAccount("a");
+	        theAccount = new BankAccount("checking");
 	        keyboardInput = new Scanner(System.in);
 	    }
 	    //display methods do not need to be tested
