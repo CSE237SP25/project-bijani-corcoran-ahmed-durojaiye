@@ -13,7 +13,7 @@ public class BankAccountTests {
 	@Test
 	public void testSimpleDeposit() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount("checking");
 		
 		//2. Call the method being tested
 		account.deposit(25);
@@ -25,7 +25,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeDeposit() {
 		//1. Create object to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount("checking");
 
 		try {
 			account.deposit(-25);
@@ -38,7 +38,7 @@ public class BankAccountTests {
 
 	@Test
 	public void testSimpleWithdrawal(){
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount("checking");
 
 		account.deposit(30);
 
@@ -49,7 +49,7 @@ public class BankAccountTests {
 
 	 @Test
 	 public void testWithdrawalBounds(){
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount("checking");
 
 		try{
 			account.withdraw(10);
@@ -62,7 +62,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeWithdrawal() {
 
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount("checking");
 
 		try {
 			account.withdraw(-25);
@@ -74,7 +74,7 @@ public class BankAccountTests {
 	
 	 @Test
 	    public void testInvalidWithdraw(){
-	        BankAccount account = new BankAccount();
+	        BankAccount account = new BankAccount("checking");
 	        try {
 	        	account.withdraw(10);
 	            fail();
