@@ -30,9 +30,9 @@
 3. A bank customer should be able to search for a transaction by amount, date/time, type, or by description if there is one. (Victor)
 4. A bank customer should be able to schedule a future payment and/or set up repeating payments or transfers between accounts. (Victor)
 5. A bank customer should be able to close an account. (Mustafa)
-6. A bank admin should be able to freeze an account. (Alymuhammad)
-7. A bank customer should be able to create a strong Password (Alymuhammad)
-8. Mustafa is still deciding on his second issue for the next iteration. 
+6. A bank admin should be able to generate reports on account activity. (Mustafa)
+7. A bank admin should be able to freeze an account. (Alymuhammad)
+8. A bank customer should be able to create a strong Password (Alymuhammad)
 
 **Things we have implemented that do not currently work:**
 Our testing for the createAccount class is not currently working because the code was updated in another issue and the tests have not been updated yet. We do not have an interface to login and then access the menu of possible actions yet. This is something we're going to add in the next iteration, so for now, we are just providing you a script to test the majority of the code.
