@@ -4,29 +4,34 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bankapp.BankAccount;
+import bankapp.Transaction;
+import bankapp.SavingsAccount;
+import bankapp.CheckingAccount;
 
 public class BankAccountTests {
+	
+	private SavingsAccount account;
+	
+	@BeforeEach
+    public void setup() {
+        account = new SavingsAccount("TestAccount");
+    }
 
 	@Test
 	public void testSimpleDeposit() {
-		//1. Create objects to be tested
-		BankAccount account = new BankAccount("checking");
-		
-		//2. Call the method being tested
 		account.deposit(25);
 		
-		//3. Use assertions to verify results
-		assertEquals(account.getCurrentBalance(), 25.0, 0.005);
+		assertEquals(25.0, account.getBalance(), 0.005);
 	}
 	
 	@Test
 	public void testNegativeDeposit() {
-		//1. Create object to be tested
-		BankAccount account = new BankAccount("checking");
-
 		try {
 			account.deposit(-25);
 			fail();
@@ -38,19 +43,16 @@ public class BankAccountTests {
 
 	@Test
 	public void testSimpleWithdrawal(){
-		BankAccount account = new BankAccount("checking");
 
 		account.deposit(30);
 
 		account.withdraw(25);
 
-		assertEquals(account.getCurrentBalance(), 5.0, 0.005);
+		assertEquals(account.getBalance(), 5.0, 0.005);
 	 }
 
 	 @Test
 	 public void testWithdrawalBounds(){
-		BankAccount account = new BankAccount("checking");
-
 		try{
 			account.withdraw(10);
 			fail();
@@ -61,9 +63,6 @@ public class BankAccountTests {
 
 	@Test
 	public void testNegativeWithdrawal() {
-
-		BankAccount account = new BankAccount("checking");
-
 		try {
 			account.withdraw(-25);
 			fail();
@@ -74,7 +73,6 @@ public class BankAccountTests {
 	
 	 @Test
 	    public void testInvalidWithdraw(){
-	        BankAccount account = new BankAccount("checking");
 	        try {
 	        	account.withdraw(10);
 	            fail();
@@ -82,5 +80,32 @@ public class BankAccountTests {
 	            assertTrue(e != null);
 	        }
 	    }
+	 
+	 @Test
+	 public void testGetBalance() {
+		 assertEquals(0.0, account.getBalance(), 0.005);
+		 account.deposit(150);
+		 assertEquals(150.0, account.getBalance(), 0.005);
+	 }
+	 
+	 @Test
+	 public void testRecentTransactions() {
+		 account.deposit(50);
+		 account.deposit(20);
+		 account.withdraw(10);
+		 List<Transaction> recent = account.getRecentTransactions(2);
+		 assertEquals(2, recent.size());
+		 
+	 }
+	
+	 @Test
+	 public void getTestName() {
+		 assertEquals("TestAccount", account.getName());
+	 }
+	 
+	 @Test
+	 public void testGetAccountType() {
+		 assertEquals("Savings", account.getAccountType());
+	 }
 
 }
