@@ -2,7 +2,7 @@ package bankapp;
 
 import java.time.LocalDateTime;
 
-class Transaction {
+public class Transaction {
     private LocalDateTime currentTime;
     private double amount;
     private String transactionType;

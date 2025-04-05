@@ -2,7 +2,7 @@ package bankapp;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class BankAccount {
+public abstract class BankAccount {
     protected double balance;
     protected String name;
     protected List<Transaction> transactionHistory = new ArrayList<>();
