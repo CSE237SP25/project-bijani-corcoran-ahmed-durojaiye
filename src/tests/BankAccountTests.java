@@ -83,9 +83,17 @@ public class BankAccountTests {
 	 
 	 @Test
 	 public void testGetBalance() {
-		 assertEquals(0.0, account.getBalance(), 0.005);
 		 account.deposit(150);
 		 assertEquals(150.0, account.getBalance(), 0.005);
+		 account.withdraw(100);
+		 assertEquals(50.0, account.getBalance(), 0.005);
+		 
+	 }
+	 
+	 @Test
+	 public void testZeroBalance() {
+		 assertEquals(0.0, account.getBalance(), 0.005);
+ 
 	 }
 	 
 	 @Test
