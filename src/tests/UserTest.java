@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.*;
+
 
 public class UserTest {
 	private BankAccount fromAccount;
@@ -59,5 +61,24 @@ public class UserTest {
         });
 
         assertEquals("Invalid withdraw", exception.getMessage());
+    }
+    
+    @Test
+    public void testMainMenuLoginAndLogoutFlow() {
+        String simulatedInput = String.join("\n",
+                "2",             // Create User
+                "testuser",      // Username
+                "pass123",       // Password
+                "1",             // Login
+                "testuser",      // Username
+                "pass123",       // Password
+                "0",             // Logout from user menu
+                "0"              // Exit app
+        );
+
+        InputStream input = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(input);
+
+        BankApp.main(new String[0]);
     }
 }

@@ -83,7 +83,7 @@ public class BankApp {
                 String name = scanner.nextLine();
                 BankAccount acc = user.getAccount(name);
                 if (acc == null) {
-                    System.out.println("No such account"); continue;
+                    System.out.println("No such account."); continue;
                 }
                 accountMenu(acc);
             }
