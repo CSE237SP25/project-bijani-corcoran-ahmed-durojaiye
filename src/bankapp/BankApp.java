@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-class BankApp {
+public class BankApp {
     private static Map<String, User> userDB = new HashMap<>();
     private static Scanner scanner = new Scanner(System.in);
 
@@ -83,7 +83,7 @@ class BankApp {
                 String name = scanner.nextLine();
                 BankAccount acc = user.getAccount(name);
                 if (acc == null) {
-                    System.out.println("No such account"); continue;
+                    System.out.println("No such account."); continue;
                 }
                 accountMenu(acc);
             }
