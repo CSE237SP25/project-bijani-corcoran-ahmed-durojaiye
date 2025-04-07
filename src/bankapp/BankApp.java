@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-class BankApp {
+public class BankApp {
     private static Map<String, User> userDB = new HashMap<>();
     private static Scanner scanner = new Scanner(System.in);
 
