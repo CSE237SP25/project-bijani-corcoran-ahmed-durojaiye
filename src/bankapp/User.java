@@ -1,7 +1,7 @@
 package bankapp;
 import java.util.*;
 
-class User {
+public class User {
     private String username;
     private String password;
     private Map<String, BankAccount> accounts = new HashMap<>();
