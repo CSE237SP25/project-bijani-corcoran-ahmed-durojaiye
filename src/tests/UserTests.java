@@ -180,4 +180,31 @@ public class UserTests {
     public void testGetUsername() {
         assertEquals("testuser", user.getUsername());
     }
+
+    @Test
+    public void testRenameAccountSuccessfully() {
+        User user = new User("john", "pass123");
+        user.createAccount("checking", "Groceries");
+
+        user.renameAccount("Groceries", "Food");
+
+        assertNull(user.getAccount("Groceries"));
+        assertNotNull(user.getAccount("Food"));
+        assertEquals("Food", user.getAccount("Food").getName());
+    }
+
+    @Test
+    public void testRenameNonexistentAccount() {
+        User user = new User("john", "pass123");
+        user.renameAccount("DoesNotExist", "NewName");
+    }
+
+    @Test
+    public void testRenameToExistingAccountName() {
+        User user = new User("john", "pass123");
+        user.createAccount("checking", "A");
+        user.createAccount("savings", "B");
+
+        user.renameAccount("A", "B");  // should throw
+    }
 }

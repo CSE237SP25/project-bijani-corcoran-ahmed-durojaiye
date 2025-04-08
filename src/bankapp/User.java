@@ -39,6 +39,15 @@ public class User {
         receiver.deposit(amount);
     }
 
+    public void renameAccount(String oldName, String newName) {
+        if (!accounts.containsKey(oldName)) throw new IllegalArgumentException("Account not found.");
+        if (accounts.containsKey(newName)) throw new IllegalArgumentException("New account name already exists.");
+    
+        BankAccount acc = accounts.remove(oldName);
+        acc.setName(newName);
+        accounts.put(newName, acc);
+    }
+
     public BankAccount getAccount(String name) {
         return accounts.get(name);
     }
