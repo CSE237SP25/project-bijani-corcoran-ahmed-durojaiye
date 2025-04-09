@@ -1,5 +1,8 @@
 package bankapp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -130,6 +133,8 @@ public class BankApp {
         while (true) {
             System.out.println("\nAccount Menu - " + acc.getName() + " (" + acc.getAccountType() + ")");
             System.out.println("1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 0: Back");
+            System.out.println("5: Recent Transactions 6: Search Transactions 0: Back");
+
             int choice = Integer.parseInt(scanner.nextLine());
 
             if (choice == 0) break;
@@ -153,6 +158,67 @@ public class BankApp {
                 int n = Integer.parseInt(scanner.nextLine());
                 acc.getRecentTransactions(n).forEach(System.out::println);
             }
+            if (choice == 6) {
+                searchTransactionsMenu(acc);
+            }
         }
     }
+
+    private static void searchTransactionsMenu(BankAccount acc) {
+        System.out.println("\nSearch Transactions:");
+        System.out.println("1: By Amount");
+        System.out.println("2: By Date Range");
+        System.out.println("3: By Transaction Type");
+        System.out.println("0: Back");
+        
+        int choice = Integer.parseInt(scanner.nextLine());
+        List<Transaction> results = null;
+        
+        if (choice == 0) return;
+        
+        if (choice == 1) {
+            System.out.print("Enter amount: $");
+            double amount = Double.parseDouble(scanner.nextLine());
+            results = acc.searchByAmount(amount);
+        }
+        
+        if (choice == 2) {
+            try {
+                System.out.print("Start date (yyyy-MM-dd HH:mm): ");
+                String startInput = scanner.nextLine();
+                LocalDateTime start = LocalDateTime.parse(startInput, 
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                
+                System.out.print("End date (yyyy-MM-dd HH:mm): ");
+                String endInput = scanner.nextLine();
+                LocalDateTime end = LocalDateTime.parse(endInput, 
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                
+                results = acc.searchByDateRange(start, end);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use yyyy-MM-dd HH:mm");
+                return;
+            }
+        }
+        
+        if (choice == 3) {
+            System.out.println("Transaction types: deposit, withdraw");
+            System.out.print("Enter transaction type: ");
+            String type = scanner.nextLine();
+            results = acc.searchByType(type);
+        }
+        
+        // Display results
+        if (results != null) {
+            System.out.println("\nSearch Results:");
+            if (results.isEmpty()) {
+                System.out.println("No matching transactions found.");
+            } else {
+                for (Transaction t : results) {
+                    System.out.println(t);
+                }
+            }
+        }
+    }
+
 }

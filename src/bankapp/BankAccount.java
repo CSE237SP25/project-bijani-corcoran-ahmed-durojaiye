@@ -1,6 +1,8 @@
 package bankapp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class BankAccount {
     protected double balance;
@@ -30,6 +32,25 @@ public abstract class BankAccount {
 
     public List<Transaction> getRecentTransactions(int n) {
         return transactionHistory.subList(Math.max(0, transactionHistory.size() - n), transactionHistory.size());
+    }
+
+    public List<Transaction> searchByAmount(double amount) {
+        return transactionHistory.stream()
+            .filter(t -> Math.abs(t.getAmount() - amount) < 0.001)
+            .collect(Collectors.toList());
+    }
+    
+    public List<Transaction> searchByDateRange(LocalDateTime start, LocalDateTime end) {
+        return transactionHistory.stream()
+            .filter(t -> (t.getTimestamp().isEqual(start) || t.getTimestamp().isAfter(start)) 
+                      && (t.getTimestamp().isEqual(end) || t.getTimestamp().isBefore(end)))
+            .collect(Collectors.toList());
+    }
+    
+    public List<Transaction> searchByType(String type) {
+        return transactionHistory.stream()
+            .filter(t -> t.getTransactionType().equalsIgnoreCase(type))
+            .collect(Collectors.toList());
     }
 
     public String getName() { return name; }
