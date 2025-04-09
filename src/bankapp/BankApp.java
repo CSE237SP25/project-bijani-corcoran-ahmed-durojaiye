@@ -51,7 +51,7 @@ public class BankApp {
     private static void userMenu(User user) {
         while (true) {
             System.out.println("\nUser Menu - Logged in as: " + user.getUsername());
-            System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 0: Logout");
+            System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 0: Logout");
             int choice = Integer.parseInt(scanner.nextLine());
 
             if (choice == 0) break;
@@ -92,6 +92,18 @@ public class BankApp {
                 String newPass = scanner.nextLine();
                 user.changePassword(newPass);
                 System.out.println("Password changed!");
+            }
+            if (choice == 6) {
+                System.out.print("Old account name: ");
+                String oldName = scanner.nextLine();
+                System.out.print("New account name: ");
+                String newName = scanner.nextLine();
+                try {
+                    user.renameAccount(oldName, newName);
+                    System.out.println("Account renamed.");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
     }
