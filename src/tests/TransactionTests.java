@@ -22,7 +22,8 @@ public class TransactionTests {
 		assertEquals(1, transactionHistory.size());
 	}
 
-	private static void testAmountSearchExactMatch() {
+    @Test
+	public void testAmountSearchExactMatch() {
         CheckingAccount account = new CheckingAccount("Test");
         account.deposit(100.00);
         account.deposit(200.00);
@@ -31,7 +32,8 @@ public class TransactionTests {
         assertEquals("Expected 1 transaction of $200.00", 1, results.size());
     }
 
-	private static void testAmountSearchNoMatch() {
+    @Test
+	public void testAmountSearchNoMatch() {
         CheckingAccount account = new CheckingAccount("Test");
         account.deposit(100.00);
         
@@ -39,7 +41,8 @@ public class TransactionTests {
         assertEquals("Expected 0 transactions of $75.00", 0, results.size());
     }
 
-	private static void testDateRangeAllTransactions() {
+    @Test
+	public void testDateRangeAllTransactions() {
         SavingsAccount account = new SavingsAccount("Test");
         LocalDateTime now = LocalDateTime.now();
         account.deposit(100.00);
@@ -50,7 +53,8 @@ public class TransactionTests {
         assertEquals("Expected all transactions in wide range", 2, results.size());
     }
 
-	private static void testTypeSearchDeposit() {
+    @Test
+	public void testTypeSearchDeposit() {
         CheckingAccount account = new CheckingAccount("Test");
         account.deposit(100.00);
         account.withdraw(50.00);
@@ -59,7 +63,8 @@ public class TransactionTests {
         assertEquals("Expected 1 deposit transaction", 1, results.size());
     }
     
-    private static void testTypeSearchWithdraw() {
+    @Test
+    public void testTypeSearchWithdraw() {
         CheckingAccount account = new CheckingAccount("Test");
         account.deposit(100.00);
         account.withdraw(50.00);
