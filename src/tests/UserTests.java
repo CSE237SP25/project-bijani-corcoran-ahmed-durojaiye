@@ -263,7 +263,10 @@ public class UserTests {
     @Test
     public void testRenameNonexistentAccount() {
         User user = new User("john", "pass123");
-        user.renameAccount("DoesNotExist", "NewName");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            user.renameAccount("DoesNotExist", "NewName");
+        });
     }
 
     @Test
@@ -272,6 +275,72 @@ public class UserTests {
         user.createAccount("checking", "A");
         user.createAccount("savings", "B");
 
-        user.renameAccount("A", "B");  // should throw
+        assertThrows(IllegalArgumentException.class, () -> {
+            user.renameAccount("A", "B");
+        });
+    }
+
+    @Test
+    public void testGetAllAccountNamesReturnsCorrectNames() {
+        User user = new User("test", "pass");
+        user.createAccount("checking", "Spend");
+        user.createAccount("savings", "Save");
+
+        Set<String> names = user.getAllAccountNames();
+        assertEquals(2, names.size());
+        assertTrue(names.contains("Spend"));
+        assertTrue(names.contains("Save"));
+    }
+
+    @Test
+    public void testAccountsReturnCorrectTypes() {
+        User user = new User("user", "pass");
+        user.createAccount("checking", "MainChecking");
+        user.createAccount("savings", "RainyDay");
+
+        BankAccount checking = user.getAccount("MainChecking");
+        BankAccount savings = user.getAccount("RainyDay");
+
+        assertEquals("Checking", checking.getAccountType());
+        assertEquals("Savings", savings.getAccountType());
+    }
+
+    @Test
+    public void testAccountsWithDepositsShowCorrectBalances() {
+        User user = new User("test", "pass");
+        user.createAccount("checking", "Food");
+        user.createAccount("savings", "Rent");
+
+        user.getAccount("Food").deposit(150);
+        user.getAccount("Rent").deposit(800);
+
+        assertEquals(150, user.getAccount("Food").getBalance(), 0.001);
+        assertEquals(800, user.getAccount("Rent").getBalance(), 0.001);
+    }
+
+    @Test
+    public void testSimulatedAccountViewPrintout_WithAssertions() {
+        User user = new User("cli", "print");
+        user.createAccount("checking", "Lunch");
+        user.createAccount("savings", "Tuition");
+
+        user.getAccount("Lunch").deposit(20.50);
+        user.getAccount("Tuition").deposit(1000);
+
+        // Capture System.out
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        for (String accName : user.getAllAccountNames()) {
+            BankAccount acc = user.getAccount(accName);
+            System.out.println("- " + acc.getName() + " (" + acc.getAccountType() + "): $" + acc.getBalance());
+        }
+
+        System.setOut(originalOut);
+
+        String output = outputStream.toString().trim();
+        assertTrue(output.contains("- Lunch (Checking): $20.5"));
+        assertTrue(output.contains("- Tuition (Savings): $1000.0"));
     }
 }

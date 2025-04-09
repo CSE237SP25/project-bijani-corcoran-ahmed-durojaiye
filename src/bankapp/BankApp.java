@@ -69,7 +69,7 @@ public class BankApp {
     private static void userMenu(User user) {
         while (true) {
             System.out.println("\nUser Menu - Logged in as: " + user.getUsername());
-            System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 0: Logout");
+            System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 7: View All Accounts 0: Logout");
             int choice = Integer.parseInt(scanner.nextLine());
 
             if (choice == 0) break;
@@ -121,6 +121,16 @@ public class BankApp {
                     System.out.println("Account renamed.");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                }
+            }
+            if (choice == 7) {
+                if (user.getAllAccountNames().isEmpty()) {
+                    System.out.println("No accounts found.");
+                } else {
+                    for (String accName : user.getAllAccountNames()) {
+                        BankAccount acc = user.getAccount(accName);
+                        System.out.println("- " + acc.getName() + " (" + acc.getAccountType() + "): $" + acc.getBalance());
+                    }
                 }
             }
         }
