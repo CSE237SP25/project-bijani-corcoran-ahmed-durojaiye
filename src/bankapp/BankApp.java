@@ -5,27 +5,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.*;
 
 public class BankApp {
-    private static Map<String, User> userDB = new HashMap<>();
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Map<String, User> userDB = new HashMap<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (true) {
             System.out.println("Welcome. 1: Login 2: Create User 0: Exit");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = readInt();
 
-            if (choice == 0) break;
-            if (choice == 1) login();
-            if (choice == 2) createUser();
+            switch (choice) {
+                case 1 -> login();
+                case 2 -> createUser();
+                case 0 -> {
+                    System.out.println("Goodbye!");
+                    return;
+                }
+                default -> System.out.println("Invalid option.");
+            }
         }
     }
 
     private static void createUser() {
-        System.out.print("Choose username: ");
-        String username = scanner.nextLine();
-        System.out.print("Choose password: ");
-        String password = scanner.nextLine();
+        String username = prompt("Choose username: ");
+        String password = prompt("Choose password: ");
 
         if (userDB.containsKey(username)) {
             System.out.println("Username already exists");
@@ -37,198 +42,224 @@ public class BankApp {
     }
 
     private static void login() {
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
+        String username = prompt("Username: ");
         User user = userDB.get(username);
-    
-        if (user == null) {
-            System.out.println("Invalid credentials");
+
+        if (isUserInvalidForLogin(user)) {
+            printLoginError(user);
             return;
         }
-    
-        if (user.accountIsLocked()) {
-            System.out.println("Account is locked due to too many failed login attempts.");
-            return;
-        }
-    
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-    
+
+        String password = prompt("Password: ");
+
         if (!user.checkPassword(password)) {
             user.registerFailedLogin();
-            if (user.accountIsLocked()) {
-                System.out.println("Too many failed attempts. Your account is now locked.");
-            } else {
-                System.out.println("Invalid credentials");
-            }
+            printFailedLoginFeedback(user);
             return;
         }
-    
-        // Success
+
         user.resetFailedAttempts();
         userMenu(user);
-    }    
+    }
 
     private static void userMenu(User user) {
         while (true) {
-            System.out.println("\nUser Menu - Logged in as: " + user.getUsername());
-            System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 7: View All Accounts 0: Logout");
-            int choice = Integer.parseInt(scanner.nextLine());
+            printUserMenu(user.getUsername());
+            int choice = readInt();
 
-            if (choice == 0) break;
-            if (choice == 1) {
-                System.out.print("Type (checking/savings): ");
-                String type = scanner.nextLine();
-                System.out.print("Account name: ");
-                String name = scanner.nextLine();
-                try {
-                    user.createAccount(type, name);
-                } catch (Exception e) { System.out.println(e.getMessage()); }
-            }
-            if (choice == 2) {
-                System.out.print("Account to delete: ");
-                String name = scanner.nextLine();
-                System.out.print("Are you sure? (yes/no): ");
-                if (scanner.nextLine().equalsIgnoreCase("yes")) {
-                    try { user.deleteAccount(name); } catch (Exception e) { System.out.println(e.getMessage()); }
-                }
-            }
-            if (choice == 3) {
-                System.out.print("From account: "); String from = scanner.nextLine();
-                System.out.print("To account: "); String to = scanner.nextLine();
-                System.out.print("Amount: "); double amt = Double.parseDouble(scanner.nextLine());
-                try { user.transfer(from, to, amt); } catch (Exception e) { System.out.println(e.getMessage()); }
-            }
-            if (choice == 4) {
-                System.out.print("Account name: ");
-                String name = scanner.nextLine();
-                BankAccount acc = user.getAccount(name);
-                if (acc == null) {
-                    System.out.println("No such account."); continue;
-                }
-                accountMenu(acc);
-            }
-            if (choice == 5) {
-                System.out.print("New password: ");
-                String newPass = scanner.nextLine();
-                user.changePassword(newPass);
-                System.out.println("Password changed!");
-            }
-            if (choice == 6) {
-                System.out.print("Old account name: ");
-                String oldName = scanner.nextLine();
-                System.out.print("New account name: ");
-                String newName = scanner.nextLine();
-                try {
-                    user.renameAccount(oldName, newName);
-                    System.out.println("Account renamed.");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            if (choice == 7) {
-                if (user.getAllAccountNames().isEmpty()) {
-                    System.out.println("No accounts found.");
-                } else {
-                    for (String accName : user.getAllAccountNames()) {
-                        BankAccount acc = user.getAccount(accName);
-                        System.out.println("- " + acc.getName() + " (" + acc.getAccountType() + "): $" + acc.getBalance());
-                    }
-                }
+            switch (choice) {
+                case 0 -> { return; }
+                case 1 -> handleCreateAccount(user);
+                case 2 -> handleDeleteAccount(user);
+                case 3 -> handleTransfer(user);
+                case 4 -> handleAccessAccount(user);
+                case 5 -> handleChangePassword(user);
+                case 6 -> handleRenameAccount(user);
+                case 7 -> handleViewAllAccounts(user);
+                default -> System.out.println("Invalid option.");
             }
         }
     }
 
     private static void accountMenu(BankAccount acc) {
         while (true) {
-            System.out.println("\nAccount Menu - " + acc.getName() + " (" + acc.getAccountType() + ")");
-            System.out.println("1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 0: Back");
-            System.out.println("5: Recent Transactions 6: Search Transactions 0: Back");
+            printAccountMenu(acc);
+            int choice = readInt();
 
-            int choice = Integer.parseInt(scanner.nextLine());
-
-            if (choice == 0) break;
-            if (choice == 1) {
-                System.out.print("Amount: ");
-                acc.deposit(Double.parseDouble(scanner.nextLine()));
-            }
-            if (choice == 2) {
-                System.out.print("Amount: ");
-                try { acc.withdraw(Double.parseDouble(scanner.nextLine())); }
-                catch (Exception e) { System.out.println(e.getMessage()); }
-            }
-            if (choice == 3) {
-                System.out.println("Balance: $" + acc.getBalance());
-            }
-            if (choice == 4) {
-                acc.getTransactionHistory().forEach(System.out::println);
-            }
-            if (choice == 5) {
-                System.out.print("How many transactions? ");
-                int n = Integer.parseInt(scanner.nextLine());
-                acc.getRecentTransactions(n).forEach(System.out::println);
-            }
-            if (choice == 6) {
-                searchTransactionsMenu(acc);
+            switch (choice) {
+                case 0 -> { return; }
+                case 1 -> acc.deposit(readDouble("Amount: "));
+                case 2 -> {
+                    try {
+                        acc.withdraw(readDouble("Amount: "));
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                case 3 -> System.out.println("Balance: $" + acc.getBalance());
+                case 4 -> acc.getTransactionHistory().forEach(System.out::println);
+                case 5 -> acc.getRecentTransactions(readInt("How many transactions? ")).forEach(System.out::println);
+                case 6 -> searchTransactionsMenu(acc);
+                default -> System.out.println("Invalid option.");
             }
         }
     }
 
     private static void searchTransactionsMenu(BankAccount acc) {
+        printSearchMenu();
+        int choice = readInt();
+        List<Transaction> results = switch (choice) {
+            case 1 -> acc.searchByAmount(readDouble("Enter amount: $"));
+            case 2 -> searchByDateRange(acc);
+            case 3 -> acc.searchByType(prompt("Enter transaction type (deposit/withdraw): "));
+            case 0 -> null;
+            default -> {
+                System.out.println("Invalid option.");
+                yield null;
+            }
+        };
+
+        printSearchResults(results);
+    }
+
+    private static void printSearchMenu() {
         System.out.println("\nSearch Transactions:");
         System.out.println("1: By Amount");
         System.out.println("2: By Date Range");
         System.out.println("3: By Transaction Type");
         System.out.println("0: Back");
-        
-        int choice = Integer.parseInt(scanner.nextLine());
-        List<Transaction> results = null;
-        
-        if (choice == 0) return;
-        
-        if (choice == 1) {
-            System.out.print("Enter amount: $");
-            double amount = Double.parseDouble(scanner.nextLine());
-            results = acc.searchByAmount(amount);
+    }
+
+    private static List<Transaction> searchByDateRange(BankAccount acc) {
+        try {
+            LocalDateTime start = LocalDateTime.parse(prompt("Start date (yyyy-MM-dd HH:mm): "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            LocalDateTime end = LocalDateTime.parse(prompt("End date (yyyy-MM-dd HH:mm): "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            return acc.searchByDateRange(start, end);
+        } catch (Exception e) {
+            System.out.println("Invalid date format. Please use yyyy-MM-dd HH:mm");
+            return Collections.emptyList();
         }
-        
-        if (choice == 2) {
+    }
+
+    private static void printSearchResults(List<Transaction> results) {
+        System.out.println("\nSearch Results:");
+        if (results == null || results.isEmpty()) {
+            System.out.println("No matching transactions found.");
+        } else {
+            results.forEach(System.out::println);
+        }
+    }
+
+    public static boolean isUserInvalidForLogin(User user) {
+        return user == null || user.accountIsLocked();
+    }
+
+    private static void printLoginError(User user) {
+        if (user == null) System.out.println("Invalid credentials");
+        else System.out.println("Account is locked due to too many failed login attempts.");
+    }
+
+    private static void printFailedLoginFeedback(User user) {
+        if (user.accountIsLocked()) System.out.println("Too many failed attempts. Your account is now locked.");
+        else System.out.println("Invalid credentials");
+    }
+
+    private static String prompt(String message) {
+        System.out.print(message);
+        return scanner.nextLine();
+    }
+
+    private static int readInt() {
+        return Integer.parseInt(scanner.nextLine());
+    }
+
+    private static int readInt(String message) {
+        System.out.print(message);
+        return Integer.parseInt(scanner.nextLine());
+    }
+
+    private static double readDouble(String message) {
+        System.out.print(message);
+        return Double.parseDouble(scanner.nextLine());
+    }
+
+    private static void printUserMenu(String username) {
+        System.out.println("\nUser Menu - Logged in as: " + username);
+        System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 7: View All Accounts 0: Logout");
+    }
+
+    private static void printAccountMenu(BankAccount acc) {
+        System.out.println("\nAccount Menu - " + acc.getName() + " (" + acc.getAccountType() + ")");
+        System.out.println("1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 0: Back");
+    }
+
+    private static void handleCreateAccount(User user) {
+        String type = prompt("Type (checking/savings): ");
+        String name = prompt("Account name: ");
+        try {
+            user.createAccount(type, name);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void handleDeleteAccount(User user) {
+        String name = prompt("Account to delete: ");
+        if (prompt("Are you sure? (yes/no): ").equalsIgnoreCase("yes")) {
             try {
-                System.out.print("Start date (yyyy-MM-dd HH:mm): ");
-                String startInput = scanner.nextLine();
-                LocalDateTime start = LocalDateTime.parse(startInput, 
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                
-                System.out.print("End date (yyyy-MM-dd HH:mm): ");
-                String endInput = scanner.nextLine();
-                LocalDateTime end = LocalDateTime.parse(endInput, 
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                
-                results = acc.searchByDateRange(start, end);
+                user.deleteAccount(name);
             } catch (Exception e) {
-                System.out.println("Invalid date format. Please use yyyy-MM-dd HH:mm");
-                return;
-            }
-        }
-        
-        if (choice == 3) {
-            System.out.println("Transaction types: deposit, withdraw");
-            System.out.print("Enter transaction type: ");
-            String type = scanner.nextLine();
-            results = acc.searchByType(type);
-        }
-        
-        // Display results
-        if (results != null) {
-            System.out.println("\nSearch Results:");
-            if (results.isEmpty()) {
-                System.out.println("No matching transactions found.");
-            } else {
-                for (Transaction t : results) {
-                    System.out.println(t);
-                }
+                System.out.println(e.getMessage());
             }
         }
     }
 
+    private static void handleTransfer(User user) {
+        String from = prompt("From account: ");
+        String to = prompt("To account: ");
+        double amt = readDouble("Amount: ");
+        try {
+            user.transfer(from, to, amt);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void handleAccessAccount(User user) {
+        String name = prompt("Account name: ");
+        BankAccount acc = user.getAccount(name);
+        if (acc == null) {
+            System.out.println("No such account.");
+        } else {
+            accountMenu(acc);
+        }
+    }
+
+    private static void handleChangePassword(User user) {
+        String newPass = prompt("New password: ");
+        user.changePassword(newPass);
+        System.out.println("Password changed!");
+    }
+
+    private static void handleRenameAccount(User user) {
+        String oldName = prompt("Old account name: ");
+        String newName = prompt("New account name: ");
+        try {
+            user.renameAccount(oldName, newName);
+            System.out.println("Account renamed.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void handleViewAllAccounts(User user) {
+        if (user.getAllAccountNames().isEmpty()) {
+            System.out.println("No accounts found.");
+            return;
+        }
+        for (String accName : user.getAllAccountNames()) {
+            BankAccount acc = user.getAccount(accName);
+            System.out.println("- " + acc.getName() + " (" + acc.getAccountType() + "): $" + acc.getBalance());
+        }
+    }
 }
