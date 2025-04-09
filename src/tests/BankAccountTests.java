@@ -9,10 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import bankapp.BankAccount;
 import bankapp.Transaction;
 import bankapp.SavingsAccount;
-import bankapp.CheckingAccount;
 
 public class BankAccountTests {
 	

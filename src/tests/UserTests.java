@@ -65,6 +65,29 @@ public class UserTests {
     }
 
     @Test
+    public void testSimulatedLoginFlowForLockedOutUser() {
+        User user = new User("loginUser", "correctPass");
+
+        // Simulate 2 wrong logins
+        if (!user.checkPassword("wrong1"))
+            user.registerFailedLogin();
+        if (!user.checkPassword("wrong2"))
+            user.registerFailedLogin();
+        assertFalse(user.accountIsLocked());
+
+        // Correct login
+        if (user.checkPassword("correctPass"))
+            user.resetFailedAttempts();
+        assertFalse(user.accountIsLocked());
+
+        // 3 bad attempts again
+        user.registerFailedLogin();
+        user.registerFailedLogin();
+        user.registerFailedLogin();
+        assertTrue(user.accountIsLocked());
+    }
+
+    @Test
     public void testMainMenuLoginAndLogoutFlow() {
         String simulatedInput = String.join("\n",
                 "2", // Create User
@@ -98,6 +121,50 @@ public class UserTests {
         user.changePassword("newpass");
         assertTrue(user.checkPassword("newpass"));
         assertFalse(user.checkPassword("testpass"));
+    }
+
+    @Test
+    public void testIsLockedInitiallyFalse() {
+        User user = new User("user1", "pass1");
+        assertFalse(user.accountIsLocked());
+    }
+
+    @Test
+    public void testRegisterFailedLoginIncrementsAndLocks() {
+        User user = new User("user2", "pass2");
+        user.registerFailedLogin(); // 1
+        assertFalse(user.accountIsLocked());
+
+        user.registerFailedLogin(); // 2
+        assertFalse(user.accountIsLocked());
+
+        user.registerFailedLogin(); // 3
+        assertTrue(user.accountIsLocked());
+    }
+
+    @Test
+    public void testResetFailedAttemptsResetsCounter() {
+        User user = new User("user3", "pass3");
+        user.registerFailedLogin();
+        user.registerFailedLogin();
+        assertFalse(user.accountIsLocked());
+
+        user.resetFailedAttempts(); // simulate success
+        user.registerFailedLogin(); // 1 fail after reset
+        assertFalse(user.accountIsLocked());
+    }
+
+    @Test
+    public void testResetAfterLockDoesNotUnlock() {
+        User user = new User("user4", "pass4");
+        user.registerFailedLogin();
+        user.registerFailedLogin();
+        user.registerFailedLogin(); // now locked
+
+        assertTrue(user.accountIsLocked());
+
+        user.resetFailedAttempts(); // shouldn't "unlock"
+        assertTrue(user.accountIsLocked()); // still locked
     }
 
     @Test

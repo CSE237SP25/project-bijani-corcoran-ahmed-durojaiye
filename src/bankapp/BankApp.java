@@ -36,17 +36,35 @@ public class BankApp {
     private static void login() {
         System.out.print("Username: ");
         String username = scanner.nextLine();
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
         User user = userDB.get(username);
-        if (user == null || !user.checkPassword(password)) {
+    
+        if (user == null) {
             System.out.println("Invalid credentials");
             return;
         }
-
+    
+        if (user.accountIsLocked()) {
+            System.out.println("Account is locked due to too many failed login attempts.");
+            return;
+        }
+    
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+    
+        if (!user.checkPassword(password)) {
+            user.registerFailedLogin();
+            if (user.accountIsLocked()) {
+                System.out.println("Too many failed attempts. Your account is now locked.");
+            } else {
+                System.out.println("Invalid credentials");
+            }
+            return;
+        }
+    
+        // Success
+        user.resetFailedAttempts();
         userMenu(user);
-    }
+    }    
 
     private static void userMenu(User user) {
         while (true) {
