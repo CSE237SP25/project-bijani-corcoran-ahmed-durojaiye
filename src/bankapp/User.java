@@ -37,6 +37,14 @@ public class User {
 
     public void transfer(String from, String to, double amount) {
         if (!accounts.containsKey(from) || !accounts.containsKey(to)) throw new IllegalArgumentException("Accounts missing");
+        
+        if (accounts.size() < 2) {
+            throw new IllegalArgumentException("You need at least two accounts to make a transfer.");
+        }
+        if (from.equals(to)) {
+            throw new IllegalArgumentException("Cannot transfer to the same account");
+        }
+
         BankAccount sender = accounts.get(from);
         BankAccount receiver = accounts.get(to);
         sender.withdraw(amount);

@@ -46,8 +46,8 @@ Our testing for the createAccount class is not currently working because the cod
 **What user stories were completed this iteration?**
 1. A bank customer should be able to transfer money between accounts. (Charlotte)
 2. A bank customer should be able to progress through the "banking app" within the terminal. (Charlotte)
-3. A bank customer should be able to search for a transaction by amount, date/time, type, or by description if there is one. (Victor)
-4. A bank customer should be able to schedule a future payment and/or set up repeating payments or transfers between accounts. (Victor)
+3. A bank customer should be able to search for a transaction by amount, date/time, or type if there is one. (Victor)
+4. A bank customer should not be able to transfer if they only have one existing account. (Victor)
 5. A bank customer should be able to close an account. (Mustafa)
 6. A bank customer should be able to name/rename their accounts. (Mustafa)
 7. A bank customer gets locked out if they unsuccessfully log in 3 times. (Alymuhammad)
@@ -58,8 +58,8 @@ Our testing for the createAccount class is not currently working because the cod
 2. A bank customer should be able to see their total net worth (sum of balances across all accounts). (Charlotte)
 3. A bank admin should be able to generate reports on account activity. (Mustafa)
 4. Mustafa
-5. Victor
-6. Victor
+5. A bank customer should be able to schedule transactions for the future. (Victor)
+6. A bank customer should be able to set a limit on transaction amounts. (Victor)
 7. A bank admin should be able to freeze an account. (Alymuhammad)
 8. A bank customer should be able to create a strong Password (Alymuhammad)
 

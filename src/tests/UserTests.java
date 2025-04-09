@@ -227,6 +227,27 @@ public class UserTests {
     }
 
     @Test
+    public void testTransferRequiresTwoAccounts() {
+        user.createAccount("checking", "Primary");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            user.transfer("Primary", "Primary", 100.00);
+        });
+        assertEquals("You need at least two accounts to make a transfer.", exception.getMessage());
+    }
+
+    @Test
+    public void testTransferRequiresDifferentAccounts() {
+        user.createAccount("checking", "Primary");
+        user.createAccount("savings", "Savings");
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            user.transfer("Primary", "Primary", 100.00);
+        });
+        
+        assertEquals("Cannot transfer to the same account", exception.getMessage());
+    }
+
+    @Test
     public void testGetAccountReturnsCorrectInstance() {
         user.createAccount("checking", "main");
         BankAccount acc = user.getAccount("main");
