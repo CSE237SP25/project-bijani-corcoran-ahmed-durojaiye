@@ -14,10 +14,8 @@ public class BankApp {
 
     public static void main(String[] args) {
         while (true) {
-            System.out.println("Welcome. 1: Login 2: Create User 0: Exit");
-            int choice = readInt();
             System.out.println("Welcome.  1: Login  2: Create User  0: Exit");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = readInt();
 
             switch (choice) {
                 case 1 -> login();
