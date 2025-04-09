@@ -49,14 +49,14 @@ Our testing for the createAccount class is not currently working because the cod
 3. A bank customer should be able to search for a transaction by amount, date/time, type, or by description if there is one. (Victor)
 4. A bank customer should be able to schedule a future payment and/or set up repeating payments or transfers between accounts. (Victor)
 5. A bank customer should be able to close an account. (Mustafa)
-6. A bank customer should be able to name/rename their accounts(Mustafa)
+6. A bank customer should be able to name/rename their accounts. (Mustafa)
 7. A bank customer gets locked out if they unsuccessfully log in 3 times. (Alymuhammad)
 8. A bank customer should be able to see a list of all accounts associated with their user profile. (Alymuhammad)
 
 **What user stories do you intend to complete next iteration?**
 1. A bank customer should be able to print a summary of all their accounts. (Charlotte)
 2. A bank customer should be able to see their total net worth (sum of balances across all accounts). (Charlotte)
-3. Mustafa
+3. A bank admin should be able to generate reports on account activity. (Mustafa)
 4. Mustafa
 5. Victor
 6. Victor
