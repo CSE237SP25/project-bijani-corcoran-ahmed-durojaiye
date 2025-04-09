@@ -5,10 +5,14 @@ public class User {
     private String username;
     private String password;
     private Map<String, BankAccount> accounts = new HashMap<>();
+    private int failedLoginAttempts;
+    private boolean accountIsLocked;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.failedLoginAttempts = 0;
+        this.accountIsLocked = false;
     }
 
     public boolean checkPassword(String input) {
@@ -37,6 +41,21 @@ public class User {
         BankAccount receiver = accounts.get(to);
         sender.withdraw(amount);
         receiver.deposit(amount);
+    }
+
+    public void resetFailedAttempts() {
+        this.failedLoginAttempts = 0;
+    } 
+    
+    public void registerFailedLogin() {
+        this.failedLoginAttempts++;
+        if (failedLoginAttempts >= 3) {
+            accountIsLocked = true;
+        }
+    }   
+
+    public boolean accountIsLocked() {
+        return accountIsLocked;
     }
 
     public BankAccount getAccount(String name) {
