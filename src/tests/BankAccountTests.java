@@ -13,21 +13,21 @@ import bankapp.Transaction;
 import bankapp.SavingsAccount;
 
 public class BankAccountTests {
-	
+
 	private SavingsAccount account;
-	
+
 	@BeforeEach
-    public void setup() {
-        account = new SavingsAccount("TestAccount");
-    }
+	public void setup() {
+		account = new SavingsAccount("TestAccount");
+	}
 
 	@Test
 	public void testSimpleDeposit() {
 		account.deposit(25);
-		
+
 		assertEquals(25.0, account.getBalance(), 0.005);
 	}
-	
+
 	@Test
 	public void testNegativeDeposit() {
 		try {
@@ -37,30 +37,41 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
-	
 
 	@Test
-	public void testSimpleWithdrawal(){
+	public void testSimpleWithdrawal() {
 
-		account.deposit(30);
+		account.deposit(130);
 
 		account.withdraw(25);
 
-		assertEquals(account.getBalance(), 5.0, 0.005);
-	 }
+		assertEquals(account.getBalance(), 105.0, 0.005);
+	}
 
-	 @Test
-	 public void testWithdrawalBounds(){
-		try{
-			account.withdraw(10);
-			fail();
-		} catch (IllegalArgumentException e){
-			assertTrue(e != null);
+	@Test
+	public void testWithdrawalAboveMinimumBalance() {
+		account.deposit(150);
+
+		try {
+			account.withdraw(60);
+			fail("Expected IllegalArgumentException due to minimum balance rule");
+		} catch (IllegalArgumentException e) {
+			assertTrue(e.getMessage().contains("Insufficient balance"));
 		}
-	 }
+	}
+
+	@Test
+	public void testWithdrawalToMaintainMinimumBalance() {
+		account.deposit(150);
+
+		account.withdraw(50);
+
+		assertEquals(100.0, account.getBalance(), 0.005);
+	}
 
 	@Test
 	public void testNegativeWithdrawal() {
+		account.deposit(120);
 		try {
 			account.withdraw(-25);
 			fail();
@@ -68,50 +79,50 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
-	
-	 @Test
-	    public void testInvalidWithdraw(){
-	        try {
-	        	account.withdraw(10);
-	            fail();
-	        } catch (IllegalArgumentException e) {
-	            assertTrue(e != null);
-	        }
-	    }
-	 
-	 @Test
-	 public void testGetBalance() {
-		 account.deposit(150);
-		 assertEquals(150.0, account.getBalance(), 0.005);
-		 account.withdraw(100);
-		 assertEquals(50.0, account.getBalance(), 0.005);
-		 
-	 }
-	 
-	 @Test
-	 public void testZeroBalance() {
-		 assertEquals(0.0, account.getBalance(), 0.005);
- 
-	 }
-	 
-	 @Test
-	 public void testRecentTransactions() {
-		 account.deposit(50);
-		 account.deposit(20);
-		 account.withdraw(10);
-		 List<Transaction> recent = account.getRecentTransactions(2);
-		 assertEquals(2, recent.size());
-		 
-	 }
-	
-	 @Test
-	 public void getTestName() {
-		 assertEquals("TestAccount", account.getName());
-	 }
-	 
-	 @Test
-	 public void testGetAccountType() {
-		 assertEquals("Savings", account.getAccountType());
-	 }
+
+	@Test
+	public void testInvalidWithdraw() {
+		try {
+			account.withdraw(10);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+	}
+
+	@Test
+	public void testGetBalance() {
+		account.deposit(150);
+		assertEquals(150.0, account.getBalance(), 0.005);
+		account.withdraw(25);
+		assertEquals(125.0, account.getBalance(), 0.005);
+
+	}
+
+	@Test
+	public void testZeroBalance() {
+		assertEquals(0.0, account.getBalance(), 0.005);
+
+	}
+
+	@Test
+	public void testRecentTransactions() {
+		account.deposit(150);
+		account.deposit(20);
+		account.withdraw(10);
+		List<Transaction> recent = account.getRecentTransactions(2);
+		assertEquals(2, recent.size());
+
+	}
+
+	@Test
+	public void getTestName() {
+		assertEquals("TestAccount", account.getName());
+	}
+
+	@Test
+	public void testGetAccountType() {
+		assertEquals("Savings", account.getAccountType());
+	}
 
 }
