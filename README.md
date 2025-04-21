@@ -74,7 +74,27 @@ Not at the moment!
 To test: ./MenuScript.sh
 
 ## <ins> ** Third Iteration ** </ins>
+**What user stories were completed this iteration?**
+1. A bank customer should be able to print a summary of all their accounts. (Charlotte)
+2. A bank customer should have a minimum account balance of $100 in savings accounts. (Charlotte)
+3. (Victor)
+4. (Victor)
+5. (Mustafa)
+6. (Mustafa)
+7. (Alymuhammad)
+8. (Alymuhammad)
 
+**What user stories do you intend to complete next iteration?**
+N/A
+
+
+**Is there anything that you implemented but doesn't currently work?**
+
+Not at the moment!
+
+**What commands are needed to compile and run your code from the command line (please provide a script that users can run to launch your program)?**
+
+To test, run this script in the project folder in the command line: ./MenuScript.sh
 
 
 ### <ins> Notes </ins>
