@@ -77,6 +77,7 @@ public class BankApp {
                 case 5 -> handleChangePassword(user);
                 case 6 -> handleRenameAccount(user);
                 case 7 -> handleViewAllAccounts(user);
+                case 8 -> seeUserSummary(user);
                 default -> System.out.println("Invalid option.");
             }
         }
@@ -186,7 +187,7 @@ public class BankApp {
 
     private static void printUserMenu(String username) {
         System.out.println("\nUser Menu - Logged in as: " + username);
-        System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 7: View All Accounts 0: Logout");
+        System.out.println("1: Create Account 2: Delete Account 3: Transfer 4: Go Into Account 5: Change Password 6: Rename Account 7: View All Accounts 8: See User Summary 0: Logout");
     }
 
     private static void printAccountMenu(BankAccount acc) {
@@ -260,8 +261,12 @@ public class BankApp {
         }
         for (String accName : user.getAllAccountNames()) {
             BankAccount acc = user.getAccount(accName);
-            System.out.println("- " + acc.getName() + " (" + acc.getAccountType() + "): $" + acc.getBalance());
+            System.out.println("- " + acc.getName());
         }
+    }
+    
+    public static void seeUserSummary(User user) {
+        user.printSummary();
     }
     
     private static List<Transaction> searchByAmount(BankAccount acc) {
@@ -300,4 +305,5 @@ public class BankApp {
         String type = scanner.nextLine().trim().toLowerCase();
         return acc.searchByType(type);
     }
+    
 }

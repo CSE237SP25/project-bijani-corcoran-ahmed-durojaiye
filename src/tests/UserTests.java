@@ -16,6 +16,9 @@ public class UserTests {
     private User user;
     private BankAccount fromAccount;
     private BankAccount toAccount;
+    private User emptyUser;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+
 
     @BeforeEach
     public void setUp() {
@@ -25,6 +28,9 @@ public class UserTests {
 
         fromAccount.deposit(500);
         toAccount.deposit(200);
+        
+        emptyUser = new User("john_doe", "password123");
+        System.setOut(new PrintStream(outputStreamCaptor)); 
     }
 
     @Test
@@ -364,4 +370,25 @@ public class UserTests {
         assertTrue(output.contains("- Lunch (Checking): $20.5"));
         assertTrue(output.contains("- Tuition (Savings): $1000.0"));
     }
+    
+    @Test
+    void testPrintSummary_NoAccounts() {
+        emptyUser.printSummary();
+        
+        assertEquals("No accounts found.\n", outputStreamCaptor.toString());
+    }
+    
+    @Test
+    void testPrintSummary_WithAccounts() {
+        // Create some accounts
+    	emptyUser.createAccount("checking", "checking1");
+    	emptyUser.createAccount("savings", "savings1");
+
+        // Print the summary
+    	emptyUser.printSummary();
+
+        // Verify that the output is not "No accounts found."
+        assertFalse(outputStreamCaptor.toString().contains("No accounts found."));
+    }
+    
 }

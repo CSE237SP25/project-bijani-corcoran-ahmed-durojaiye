@@ -74,6 +74,24 @@ public class User {
         acc.setName(newName);
         accounts.put(newName, acc);
     }
+    
+    public void printSummary() {
+        if (accounts.isEmpty()) {
+            System.out.println("No accounts found.");
+            return;
+        }
+
+        double totalNetWorth = 0.0;
+        System.out.println("Account Summary:");
+        for (BankAccount acc : accounts.values()) {
+            System.out.println("- " + acc.getName() + 
+                " (" + acc.getAccountType() + "), Balance: $" + acc.getBalance() + 
+                ", Transactions: " + acc.getTransactionHistory().size());
+            totalNetWorth += acc.getBalance();
+        }
+        System.out.printf("Total Net Worth: $%.2f\n", totalNetWorth);
+    }
+
 
     public BankAccount getAccount(String name) {
         return accounts.get(name);
