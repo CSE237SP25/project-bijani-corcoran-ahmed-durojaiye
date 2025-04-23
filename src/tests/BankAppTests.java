@@ -72,7 +72,55 @@ public class BankAppTests {
         assertTrue(output.contains("- Lunch (Checking): $20.5"));
         assertTrue(output.contains("- Tuition (Savings): $1000.0"));
     }
-    
+
+    @Test
+    public void testPasswordConfirmationMismatchRetryAndSuccess() {
+        String simulatedInput = String.join("\n",
+            "2",           // Create User
+            "user123",     // Username
+            "pass1",       // Password
+            "wrongpass",   // Mismatch
+            "pass1",       // Retry password
+            "pass1",       // Retry confirm
+            "0"            // Exit
+        );
+
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        BankApp.main(new String[0]);
+
+        String output = out.toString();
+        assertTrue(output.contains("Passwords do not match"));
+        assertTrue(output.contains("User created!"));
+    }
+
+    @Test
+    public void testLoginWithHiddenPasswordFallback() {
+        String simulatedInput = String.join("\n",
+            "2",             // Create User
+            "usercli",       // Username
+            "secure123",     // Password
+            "secure123",     // Confirm password
+            "1",             // Login
+            "usercli",       // Username
+            "secure123",     // Password
+            "0",             // Logout
+            "0"              // Exit
+        );
+
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        assertDoesNotThrow(() -> BankApp.main(new String[0]));
+
+        String output = out.toString();
+        assertTrue(output.contains("User created!"));
+        assertTrue(output.contains("Logged in as: usercli"));
+    }
+
     @Test
 	void testPrintSummaryNoAccounts() {
     	User emptyUser = new User("john_doe", "password123");
