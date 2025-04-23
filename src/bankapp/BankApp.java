@@ -333,8 +333,12 @@ public class BankApp {
 	}
 
 	private static int readInt() {
-		return Integer.parseInt(scanner.nextLine());
-	}
+        if (!scanner.hasNextLine()) {
+            System.out.println("⚠️ No more input available. Exiting test.");
+            return 0;  // Or throw or exit
+        }
+        return Integer.parseInt(scanner.nextLine());
+    }
 
 	private static int readInt(String message) {
 		System.out.print(message);

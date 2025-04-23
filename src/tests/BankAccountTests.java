@@ -181,7 +181,7 @@ public class BankAccountTests {
 	public void testExportTransactionHistory() throws IOException {
 		String testFileName = "test_export.txt";
 
-		account.deposit(100.00, "Test deposit");
+		account.deposit(150.00, "Test deposit");
 		account.withdraw(25.00, "Test withdrawal");
 		
 		account.exportTransactionHistory(testFileName);
@@ -193,7 +193,7 @@ public class BankAccountTests {
 		
 		assertTrue(lines.get(0).contains("TestAccount"));
 		assertTrue(lines.get(0).contains("Savings"));
-		assertTrue(lines.get(1).contains("Balance: $75.0"));
+		assertTrue(lines.get(1).contains("Balance: $125.0"));
 		Files.deleteIfExists(Paths.get(testFileName));
 	}
 
