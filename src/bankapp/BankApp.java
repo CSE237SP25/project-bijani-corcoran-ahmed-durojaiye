@@ -2,10 +2,6 @@ package bankapp;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.*;
 
 public class BankApp {
@@ -94,10 +90,16 @@ public class BankApp {
 			case 0 -> {
 				return;
 			}
-			case 1 -> acc.deposit(readDouble("Amount (numbers only): "));
+			case 1 -> {
+            	double amount = readDouble("Amount (numbers only): ");
+            	String description = prompt("Description (optional): ");
+            	acc.deposit(amount, description.isEmpty() ? "" : description);
+        	}
 			case 2 -> {
 				try {
-					acc.withdraw(readDouble("Amount (numbers only): "));
+					double amount = readDouble("Amount (numbers only): ");
+             		String description = prompt("Description (optional): ");
+                	acc.withdraw(amount, description.isEmpty() ? "" : description);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
@@ -232,8 +234,9 @@ public class BankApp {
 		String from = prompt("From account: ");
 		String to = prompt("To account: ");
 		double amt = readDouble("Amount: ");
+		String description = prompt("Description (optional): ");
 		try {
-			user.transfer(from, to, amt);
+			user.transfer(from, to, amt, description);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
