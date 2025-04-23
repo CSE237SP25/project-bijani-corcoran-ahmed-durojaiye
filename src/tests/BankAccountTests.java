@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -171,6 +175,26 @@ public class BankAccountTests {
 	@Test
 	public void testGetAccountType() {
 		assertEquals("Savings", account.getAccountType());
+	}
+
+	@Test
+	public void testExportTransactionHistory() throws IOException {
+		String testFileName = "test_export.txt";
+
+		account.deposit(100.00, "Test deposit");
+		account.withdraw(25.00, "Test withdrawal");
+		
+		account.exportTransactionHistory(testFileName);
+		
+		File exportFile = new File(testFileName);
+		assertTrue(exportFile.exists());
+		
+		List<String> lines = Files.readAllLines(Paths.get(testFileName));
+		
+		assertTrue(lines.get(0).contains("TestAccount"));
+		assertTrue(lines.get(0).contains("Savings"));
+		assertTrue(lines.get(1).contains("Balance: $75.0"));
+		Files.deleteIfExists(Paths.get(testFileName));
 	}
 
 }
