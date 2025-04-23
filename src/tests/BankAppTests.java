@@ -72,6 +72,57 @@ public class BankAppTests {
         assertTrue(output.contains("- Lunch (Checking): $20.5"));
         assertTrue(output.contains("- Tuition (Savings): $1000.0"));
     }
+
+    @Test
+    public void testPasswordConfirmationMismatchDuringUserCreation() {
+        String simulatedInput = String.join("\n",
+            "2",           // Choose Create User
+            "testuser",    // Username
+            "pass123",     // First password
+            "wrongpass",   // Mismatched confirmation
+            "pass123",     // Retry first password
+            "pass123",     // Correct confirmation
+            "0"            // Exit
+        );
+
+        InputStream input = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(input);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        BankApp.main(new String[0]);
+
+        String output = outputStream.toString();
+        assertTrue(output.contains("Passwords do not match"));
+        assertTrue(output.contains("User created!"));
+    }
+
+    @Test
+    public void testHiddenPasswordFallbackWorksInIDE() {
+        String simulatedInput = String.join("\n",
+            "2",         // Create User
+            "hiddenUser",
+            "secret123", // password
+            "secret123", // confirmation
+            "1",         // Login
+            "hiddenUser",
+            "secret123", // password
+            "0",         // Logout
+            "0"          // Exit
+        );
+    
+        InputStream input = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(input);
+    
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+    
+        assertDoesNotThrow(() -> BankApp.main(new String[0]));
+        String output = outputStream.toString();
+        assertTrue(output.contains("User created!"));
+        assertTrue(output.contains("Logged in as: hiddenUser"));
+    }    
     
     @Test
 	void testPrintSummaryNoAccounts() {

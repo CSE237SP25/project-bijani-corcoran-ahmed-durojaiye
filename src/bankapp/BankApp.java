@@ -1,11 +1,8 @@
 package bankapp;
 
+import java.io.Console;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.*;
 
 public class BankApp {
@@ -31,7 +28,18 @@ public class BankApp {
 
 	private static void createUser() {
 		String username = prompt("Choose username: ");
-		String password = prompt("Choose password: ");
+		String password, confirmPassword;
+
+		while (true) {
+			password = readPassword("Choose password: ");
+			confirmPassword = readPassword("Confirm password: ");
+
+			if (password.equals(confirmPassword)) {
+				break;
+			} else {
+				System.out.println("Passwords do not match. Try again.");
+			}
+		}
 
 		if (userDB.containsKey(username)) {
 			System.out.println("Username already exists");
@@ -51,7 +59,7 @@ public class BankApp {
 			return;
 		}
 
-		String password = prompt("Password: ");
+		String password = readPassword("Password: ");
 
 		if (!user.checkPassword(password)) {
 			user.registerFailedLogin();
@@ -254,6 +262,19 @@ public class BankApp {
 		user.changePassword(newPass);
 		System.out.println("Password changed!");
 	}
+
+		private static String readPassword(String message) {
+		System.out.print(message);
+		Console console = System.console();
+		if (console != null) {
+			char[] passwordChars = console.readPassword();
+			return new String(passwordChars);
+		} else {
+			// fallback if console is null (e.g., running inside an IDE)
+			return scanner.nextLine();
+		}
+	}
+
 
 	private static void handleRenameAccount(User user) {
 		String oldName = prompt("Old account name: ");
