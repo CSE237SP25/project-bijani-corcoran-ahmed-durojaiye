@@ -30,18 +30,18 @@ public class BankApp {
 	private static void createUser() {
 		String username = prompt("Choose username: ");
 		String password, confirmPassword;
-	
+
 		while (true) {
 			password = readPassword("Choose password: ");
 			confirmPassword = readPassword("Confirm password: ");
-	
+
 			if (password.equals(confirmPassword)) {
 				break;
 			} else {
 				System.out.println("Passwords do not match. Try again.");
 			}
 		}
-	
+
 		if (userDB.containsKey(username)) {
 			System.out.println("Username already exists");
 			return;
