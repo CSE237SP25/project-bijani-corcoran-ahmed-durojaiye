@@ -14,7 +14,6 @@ public class BankApp {
 		while (true) {
 			System.out.println("Welcome.  1: Login  2: Create User  0: Exit");
 			int choice = readInt();
-
 			switch (choice) {
 			case 1 -> login();
 			case 2 -> createUser();
@@ -30,7 +29,6 @@ public class BankApp {
 	private static void createUser() {
 		String username = prompt("Choose username: ");
 		String password, confirmPassword;
-	
 		while (true) {
 			password = readPassword("Choose password: ");
 			confirmPassword = readPassword("Confirm password: ");
@@ -41,12 +39,10 @@ public class BankApp {
 				System.out.println("Passwords do not match. Try again.");
 			}
 		}
-	
 		if (userDB.containsKey(username)) {
 			System.out.println("Username already exists");
 			return;
 		}
-	
 		userDB.put(username, new User(username, password));
 		System.out.println("User created!");
 	}	
@@ -54,20 +50,16 @@ public class BankApp {
 	private static void login() {
 		String username = prompt("Username: ");
 		User user = userDB.get(username);
-
 		if (isUserInvalidForLogin(user)) {
 			printLoginError(user);
 			return;
 		}
-
 		String password = readPassword("Password: ");
-
 		if (!user.checkPassword(password)) {
 			user.registerFailedLogin();
 			printFailedLoginFeedback(user);
 			return;
 		}
-
 		user.resetFailedAttempts();
 		userMenu(user);
 	}
@@ -76,7 +68,6 @@ public class BankApp {
 		while (true) {
 			printUserMenu(user.getUsername());
 			int choice = readInt();
-
 			switch (choice) {
 			case 0 -> {
 				return;
@@ -122,6 +113,20 @@ public class BankApp {
 			case 5 -> acc.getRecentTransactions(readInt("How many transactions? ")).forEach(System.out::println);
 			case 6 -> searchTransactionsMenu(acc);
 			case 7 -> handleExportTransactions(acc);
+			case 8 -> {
+				if (acc instanceof CheckingAccount checking) {
+					checking.freeze();
+				} else {
+					System.out.println("Only checking accounts can be frozen.");
+				}
+			}
+			case 9 -> {
+				if (acc instanceof CheckingAccount checking) {
+					checking.unfreeze();
+				} else {
+					System.out.println("Only checking accounts can be unfrozen.");
+				}
+			}			
 			default -> System.out.println("Invalid option.");
 			}
 		}
@@ -231,7 +236,7 @@ public class BankApp {
 	private static void printAccountMenu(BankAccount acc) {
 		System.out.println("\nAccount Menu - " + acc.getName() + " (" + acc.getAccountType() + ")");
 		System.out.println(
-            "1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 7: Export Transactions 0: Back");
+            "1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 7: Export Transactions 8: Freeze Account 9: Unfreeze Account 0: Back");
 	}
 
 	private static void handleCreateAccount(User user) {

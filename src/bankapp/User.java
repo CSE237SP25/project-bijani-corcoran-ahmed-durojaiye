@@ -51,14 +51,20 @@ public class User {
 
 		BankAccount sender = accounts.get(from);
 		BankAccount receiver = accounts.get(to);
+		if (sender instanceof CheckingAccount c1 && c1.isFrozen())
+			throw new IllegalArgumentException("Source account is frozen. Cannot transfer.");
+
+		if (receiver instanceof CheckingAccount c2 && c2.isFrozen())
+			throw new IllegalArgumentException("Destination account is frozen. Cannot transfer.");
+
 		sender.withdraw(amount, "Transfer to " + to + (description.isEmpty() ? "" : ": " + description));
-    	receiver.deposit(amount, "Transfer from " + from + (description.isEmpty() ? "" : ": " + description));
+		receiver.deposit(amount, "Transfer from " + from + (description.isEmpty() ? "" : ": " + description));
 	}
 
 	public void transfer(String from, String to, double amount) {
 		transfer(from, to, amount, "");
 	}
-	
+
 	public void resetFailedAttempts() {
 		this.failedLoginAttempts = 0;
 	}
