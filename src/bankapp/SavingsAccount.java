@@ -9,7 +9,7 @@ public class SavingsAccount extends BankAccount {
 	}
 
 	@Override
-	public void withdraw(double amount) {
+	public void withdraw(double amount, String description) {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("Amount to withdraw must be positive");
 		}
