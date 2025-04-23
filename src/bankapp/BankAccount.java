@@ -14,18 +14,26 @@ public abstract class BankAccount {
         this.balance = 0;
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount, String description) {
         if (amount <= 0) throw new IllegalArgumentException("Invalid deposit");
         balance += amount;
-        transactionHistory.add(new Transaction("deposit", amount));
+        transactionHistory.add(new Transaction("deposit", amount, description));
     }
 
-    public void withdraw(double amount) {
+    public void deposit(double amount) {
+        deposit(amount, "");
+    }
+
+    public void withdraw(double amount, String description) {
         if (amount <= 0 || amount > balance) throw new IllegalArgumentException("Invalid withdraw");
         balance -= amount;
-        transactionHistory.add(new Transaction("withdraw", amount));
+        transactionHistory.add(new Transaction("withdraw", amount, description));
     }
-
+    
+    public void withdraw(double amount) {
+        withdraw(amount, "");
+    }
+        
     public double getBalance() { return balance; }
 
     public List<Transaction> getTransactionHistory() { return transactionHistory; }

@@ -35,7 +35,7 @@ public class User {
         accounts.remove(accountName);
     }
 
-    public void transfer(String from, String to, double amount) {
+    public void transfer(String from, String to, double amount, String description) {
         if (!accounts.containsKey(from) || !accounts.containsKey(to)) throw new IllegalArgumentException("Accounts missing");
         
         if (accounts.size() < 2) {
@@ -47,8 +47,13 @@ public class User {
 
         BankAccount sender = accounts.get(from);
         BankAccount receiver = accounts.get(to);
-        sender.withdraw(amount);
-        receiver.deposit(amount);
+
+        sender.withdraw(amount, "Transfer to " + to + (description.isEmpty() ? "" : ": " + description));
+        receiver.deposit(amount, "Transfer from " + from + (description.isEmpty() ? "" : ": " + description));
+    }
+
+    public void transfer(String from, String to, double amount) {
+        transfer(from, to, amount, "");
     }
 
     public void resetFailedAttempts() {

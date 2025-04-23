@@ -121,10 +121,19 @@ public class BankApp {
     }
     
     private static void handleTransfer(User user) {
-    	System.out.print("From account: "); String from = scanner.nextLine();
-        System.out.print("To account: "); String to = scanner.nextLine();
-        System.out.print("Amount: "); double amt = Double.parseDouble(scanner.nextLine());
-        try { user.transfer(from, to, amt); } catch (Exception e) { System.out.println(e.getMessage()); }
+        System.out.print("From account: "); 
+        String from = scanner.nextLine();
+        System.out.print("To account: "); 
+        String to = scanner.nextLine();
+        System.out.print("Amount: "); 
+        double amt = Double.parseDouble(scanner.nextLine());
+        System.out.print("Description (optional): ");
+        String description = scanner.nextLine();
+        try { 
+            user.transfer(from, to, amt, description); 
+        } catch (Exception e) { 
+            System.out.println(e.getMessage()); 
+        }
     }
     
     private static void handleFindAccount(User user) {
@@ -181,11 +190,17 @@ public class BankApp {
             if (choice == 0) break;
             if (choice == 1) {
                 System.out.print("Amount: ");
-                acc.deposit(Double.parseDouble(scanner.nextLine()));
+                double amount = Double.parseDouble(scanner.nextLine());
+                System.out.print("Description (optional): ");
+                String description = scanner.nextLine();
+                acc.deposit(amount, description);
             }
             if (choice == 2) {
                 System.out.print("Amount: ");
-                try { acc.withdraw(Double.parseDouble(scanner.nextLine())); }
+                double amount = Double.parseDouble(scanner.nextLine());
+                System.out.print("Description (optional): ");
+                String description = scanner.nextLine();
+                try { acc.withdraw(amount, description); }
                 catch (Exception e) { System.out.println(e.getMessage()); }
             }
             if (choice == 3) {

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bankapp.Transaction;
+import bankapp.CheckingAccount;
 import bankapp.SavingsAccount;
 
 public class BankAccountTests {
@@ -87,7 +88,7 @@ public class BankAccountTests {
 		 assertEquals(50.0, account.getBalance(), 0.005);
 		 
 	 }
-	 
+
 	 @Test
 	 public void testZeroBalance() {
 		 assertEquals(0.0, account.getBalance(), 0.005);
