@@ -10,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bankapp.Transaction;
+import bankapp.User;
+import bankapp.BankAccount;
+import bankapp.CheckingAccount;
 import bankapp.SavingsAccount;
 
 public class BankAccountTests {
@@ -48,6 +51,51 @@ public class BankAccountTests {
 		assertEquals(account.getBalance(), 105.0, 0.005);
 	}
 
+	@Test
+    public void testDepositWithDescription() {
+        BankAccount account = new CheckingAccount("Test Account");
+        account.deposit(100.00, "Birthday money");
+        
+        List<Transaction> history = account.getTransactionHistory();
+        assertEquals(1, history.size());
+        Transaction transaction = history.get(0);
+        assertEquals("deposit", transaction.getTransactionType());
+        assertEquals(100.00, transaction.getAmount(), 0.001);
+        assertEquals("Birthday money", transaction.getDescription());
+    }
+
+	@Test
+    public void testWithdrawWithDescription() {
+        BankAccount account = new CheckingAccount("Test Account");
+        account.deposit(200.00);
+        account.withdraw(50.00, "Groceries");
+        
+        List<Transaction> history = account.getTransactionHistory();
+        assertEquals(2, history.size());
+        Transaction transaction = history.get(1);
+        assertEquals("withdraw", transaction.getTransactionType());
+        assertEquals(50.00, transaction.getAmount(), 0.001);
+        assertEquals("Groceries", transaction.getDescription());
+    }
+
+	@Test
+    public void testTransferWithDescriptions() {
+        User user = new User("testuser", "password");
+        user.createAccount("checking", "Account1");
+        user.createAccount("savings", "Account2");
+        
+        BankAccount account1 = user.getAccount("Account1");
+        account1.deposit(500.00);
+        
+        user.transfer("Account1", "Account2", 200.00, "Moving savings");
+        Transaction account1Transaction = account1.getTransactionHistory().get(1);
+        assertTrue(account1Transaction.getDescription().contains("Moving savings"));
+        
+        BankAccount account2 = user.getAccount("Account2");
+        Transaction account2Transaction = account2.getTransactionHistory().get(0);
+        assertTrue(account2Transaction.getDescription().contains("Moving savings"));
+    }
+	
 	@Test
 	public void testWithdrawalAboveMinimumBalance() {
 		account.deposit(150);
