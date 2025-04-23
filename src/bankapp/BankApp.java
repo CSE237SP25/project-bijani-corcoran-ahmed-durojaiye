@@ -126,7 +126,16 @@ public class BankApp {
 				} else {
 					System.out.println("Only checking accounts can be unfrozen.");
 				}
-			}			
+			}	
+			case 10 -> {
+				if (acc instanceof SavingsAccount savings) {
+					double goal = readDouble("Enter your new savings goal: ");
+					savings.setSavingsGoal(goal);
+					System.out.println("Savings goal set to $" + goal);
+				} else {
+					System.out.println("Only savings accounts can have savings goals.");
+				}
+			}					
 			default -> System.out.println("Invalid option.");
 			}
 		}
@@ -236,7 +245,7 @@ public class BankApp {
 	private static void printAccountMenu(BankAccount acc) {
 		System.out.println("\nAccount Menu - " + acc.getName() + " (" + acc.getAccountType() + ")");
 		System.out.println(
-            "1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 7: Export Transactions 8: Freeze Account 9: Unfreeze Account 0: Back");
+            "1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 7: Export Transactions 8: Freeze Account 9: Unfreeze Account 10: Set Savings Goal 0: Back");
 	}
 
 	private static void handleCreateAccount(User user) {
