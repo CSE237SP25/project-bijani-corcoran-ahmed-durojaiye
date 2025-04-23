@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
+
+
 public abstract class BankAccount {
     protected double balance;
     protected String name;
@@ -14,16 +19,24 @@ public abstract class BankAccount {
         this.balance = 0;
     }
 
-    public void deposit(double amount) {
+    public void deposit(double amount, String description) {
         if (amount <= 0) throw new IllegalArgumentException("Invalid deposit");
         balance += amount;
-        transactionHistory.add(new Transaction("deposit", amount));
+        transactionHistory.add(new Transaction("deposit", amount, description));
     }
-
-    public void withdraw(double amount) {
+    
+    public void deposit(double amount) {
+        deposit(amount, "");
+    }
+    
+    public void withdraw(double amount, String description) {
         if (amount <= 0 || amount > balance) throw new IllegalArgumentException("Invalid withdraw");
         balance -= amount;
-        transactionHistory.add(new Transaction("withdraw", amount));
+        transactionHistory.add(new Transaction("withdraw", amount, description));
+    }
+    
+    public void withdraw(double amount) {
+        withdraw(amount, "");
     }
 
     public double getBalance() { return balance; }
@@ -60,4 +73,17 @@ public abstract class BankAccount {
     }
 
     public abstract String getAccountType();
+
+    public void exportTransactionHistory(String filename) throws IOException {
+        try (FileWriter writer = new FileWriter(filename)) {
+            writer.write("Transaction History for " + name + " (" + getAccountType() + ")\n");
+            writer.write("Balance: $" + balance + "\n");
+            writer.write("--------------------------------------\n");
+            
+            for (Transaction transaction : transactionHistory) {
+                writer.write(transaction.toString() + "\n");
+            }
+        }
+        System.out.println("Transaction history exported to " + Paths.get(filename).toAbsolutePath());
+    }
 }
