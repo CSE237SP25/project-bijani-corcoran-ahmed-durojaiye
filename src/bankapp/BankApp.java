@@ -1,5 +1,6 @@
 package bankapp;
 
+import java.io.Console;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,13 +29,24 @@ public class BankApp {
 
 	private static void createUser() {
 		String username = prompt("Choose username: ");
-		String password = prompt("Choose password: ");
-
+		String password, confirmPassword;
+	
+		while (true) {
+			password = readPassword("Choose password: ");
+			confirmPassword = readPassword("Confirm password: ");
+	
+			if (password.equals(confirmPassword)) {
+				break;
+			} else {
+				System.out.println("Passwords do not match. Try again.");
+			}
+		}
+	
 		if (userDB.containsKey(username)) {
 			System.out.println("Username already exists");
 			return;
 		}
-
+	
 		userDB.put(username, new User(username, password));
 		System.out.println("User created!");
 	}
@@ -48,7 +60,7 @@ public class BankApp {
 			return;
 		}
 
-		String password = prompt("Password: ");
+		String password = readPassword("Password: ");
 
 		if (!user.checkPassword(password)) {
 			user.registerFailedLogin();
@@ -183,6 +195,18 @@ public class BankApp {
 	private static String prompt(String message) {
 		System.out.print(message);
 		return scanner.nextLine();
+	}
+
+	private static String readPassword(String message) {
+		System.out.print(message);
+		Console console = System.console();
+		if (console != null) {
+			char[] passwordChars = console.readPassword();
+			return new String(passwordChars);
+		} else {
+			// fallback for IDEs like VS Code or IntelliJ
+			return scanner.nextLine();
+		}
 	}
 
 	private static int readInt() {

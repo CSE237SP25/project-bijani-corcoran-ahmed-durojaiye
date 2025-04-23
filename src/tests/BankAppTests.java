@@ -72,7 +72,54 @@ public class BankAppTests {
         assertTrue(output.contains("- Lunch (Checking): $20.5"));
         assertTrue(output.contains("- Tuition (Savings): $1000.0"));
     }
-    
+
+    @Test
+    public void testPasswordConfirmationMismatchAndRetry() {
+        String simulatedInput = String.join("\n",
+            "2",           // Choose "Create User"
+            "user123",     // Username
+            "pass1",       // First password
+            "wrongpass",   // Mismatch confirmation
+            "pass1",       // Re-enter password
+            "pass1",       // Matching confirmation
+            "0"            // Exit
+        );
+
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        BankApp.main(new String[0]);
+        String consoleOut = output.toString();
+
+        assertTrue(consoleOut.contains("Passwords do not match"));
+        assertTrue(consoleOut.contains("User created!"));
+    }
+
+    @Test
+    public void testHiddenPasswordFallbackAndLoginSuccess() {
+        String simulatedInput = String.join("\n",
+            "2",             // Create user
+            "usercli",       // Username
+            "mypassword",    // Password
+            "mypassword",    // Confirm
+            "1",             // Login
+            "usercli",       // Username
+            "mypassword",    // Password
+            "0",             // Logout
+            "0"              // Exit
+        );
+
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        assertDoesNotThrow(() -> BankApp.main(new String[0]));
+        String outputStr = output.toString();
+        assertTrue(outputStr.contains("User created!"));
+        assertTrue(outputStr.contains("Logged in as: usercli"));
+    }
+
     @Test
 	void testPrintSummaryNoAccounts() {
     	User emptyUser = new User("john_doe", "password123");
