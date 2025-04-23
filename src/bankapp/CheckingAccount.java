@@ -46,9 +46,10 @@ public class CheckingAccount extends BankAccount {
 
 	private boolean promptConfirmation() {
 		System.out.print("Type 'confirm' to unfreeze: ");
-		Scanner scanner = new Scanner(System.in);
-		String input = scanner.nextLine();
-		return input.equalsIgnoreCase("confirm");
+		try (Scanner scanner = new Scanner(System.in)) {
+			String input = scanner.nextLine();
+			return input.equalsIgnoreCase("confirm");
+		}
 	}
 
 }

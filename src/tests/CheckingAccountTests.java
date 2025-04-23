@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import bankapp.CheckingAccount;
 
 import java.io.ByteArrayInputStream;
-import java.util.Scanner;
 
 public class CheckingAccountTests {
 
