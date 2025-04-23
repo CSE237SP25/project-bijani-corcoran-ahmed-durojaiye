@@ -17,7 +17,7 @@ public class SavingsAccount extends BankAccount {
 			throw new IllegalArgumentException(
 					"Insufficient balance to maintain minimum balance of $100 required by all savings accounts.");
 		}
-		super.withdraw(amount);
+		super.withdraw(amount, description);
 	}
 
 	public void setSavingsGoal(double goal) {
