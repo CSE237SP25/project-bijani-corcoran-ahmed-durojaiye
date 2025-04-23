@@ -1,5 +1,6 @@
 package bankapp;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -108,6 +109,7 @@ public class BankApp {
 			case 4 -> acc.getTransactionHistory().forEach(System.out::println);
 			case 5 -> acc.getRecentTransactions(readInt("How many transactions? ")).forEach(System.out::println);
 			case 6 -> searchTransactionsMenu(acc);
+			case 7 -> handleExportTransactions(acc);
 			default -> System.out.println("Invalid option.");
 			}
 		}
@@ -206,7 +208,7 @@ public class BankApp {
 	private static void printAccountMenu(BankAccount acc) {
 		System.out.println("\nAccount Menu - " + acc.getName() + " (" + acc.getAccountType() + ")");
 		System.out.println(
-				"1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 0: Back");
+            "1: Deposit 2: Withdraw 3: Balance 4: Full History 5: Recent Transactions 6: Search Transactions 7: Export Transactions 0: Back");
 	}
 
 	private static void handleCreateAccount(User user) {
@@ -284,39 +286,13 @@ public class BankApp {
 		user.printSummary();
 	}
 
-	private static List<Transaction> searchByAmount(BankAccount acc) {
-		try {
-			System.out.print("Enter amount: $");
-			double amount = Double.parseDouble(scanner.nextLine());
-			return acc.searchByAmount(amount);
-		} catch (NumberFormatException e) {
-			System.out.println("Invalid amount.");
-			return null;
-		}
+	private static void handleExportTransactions(BankAccount acc) {
+    	String filename = prompt("Enter filename for export: ");
+    	try {
+        	acc.exportTransactionHistory(filename);
+        	System.out.println("Transaction history exported successfully!");
+    	} catch (IOException e) {
+        	System.out.println("Error exporting transaction history: " + e.getMessage());
+    	}
 	}
-
-	private static List<Transaction> searchByDate(BankAccount acc) {
-		try {
-			System.out.print("Start date (yyyy-MM-dd HH:mm): ");
-			String startInput = scanner.nextLine();
-			LocalDateTime start = LocalDateTime.parse(startInput, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-
-			System.out.print("End date (yyyy-MM-dd HH:mm): ");
-			String endInput = scanner.nextLine();
-			LocalDateTime end = LocalDateTime.parse(endInput, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-
-			return acc.searchByDateRange(start, end);
-		} catch (Exception e) {
-			System.out.println("Invalid date format. Please use yyyy-MM-dd HH:mm");
-			return null;
-		}
-	}
-
-	private static List<Transaction> searchByType(BankAccount acc) {
-		System.out.println("Transaction types: deposit, withdraw");
-		System.out.print("Enter transaction type: ");
-		String type = scanner.nextLine().trim().toLowerCase();
-		return acc.searchByType(type);
-	}
-
 }
