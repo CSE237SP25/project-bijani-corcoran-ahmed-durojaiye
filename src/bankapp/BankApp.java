@@ -186,20 +186,24 @@ public class BankApp {
 	}
 
 	private static void handleDeposit(BankAccount acc) {
-		double amount = readDouble("Amount (numbers only): ");
-		String description = prompt("Description (optional): ");
-		acc.deposit(amount, description.isEmpty() ? "" : description);
+		try {
+			double amount = readDouble("Amount (numbers only): ");
+			String description = prompt("Description (optional): ");
+			acc.deposit(amount, description.isEmpty() ? "" : description);
+		} catch (Exception e) {
+			System.out.println("⚠️ " + e.getMessage());
+		}
 	}
-
+	
 	private static void handleWithdraw(BankAccount acc) {
 		try {
 			double amount = readDouble("Amount (numbers only): ");
 			String description = prompt("Description (optional): ");
 			acc.withdraw(amount, description.isEmpty() ? "" : description);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("⚠️ " + e.getMessage());
 		}
-	}
+	}	
 
 	private static void handleFreezeAccount(BankAccount acc) {
 		if (acc instanceof CheckingAccount checking) {
