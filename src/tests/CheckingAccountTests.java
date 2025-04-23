@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import bankapp.CheckingAccount;
 
 import java.io.ByteArrayInputStream;
+import java.util.Scanner;
 
 public class CheckingAccountTests {
 
@@ -48,15 +49,17 @@ public class CheckingAccountTests {
         // Redirect input to simulate user typing "confirm"
         String simulatedInput = "confirm\n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        Scanner scanner = new Scanner(System.in); // create scanner from redirected input
 
         CheckingAccount account = new CheckingAccount("Recovery Account");
         account.deposit(200);
         account.freeze();
 
         // Unfreeze with simulated input
-        account.unfreeze();
+        account.unfreeze(scanner);
 
         account.withdraw(50);
         assertEquals(150.0, account.getBalance(), 0.005);
     }
+
 }
